@@ -1,4 +1,4 @@
-package servicesH
+package services
 
 type UserProfileHandler interface {
 	MyProfile()

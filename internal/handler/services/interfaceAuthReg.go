@@ -1,4 +1,4 @@
-package servicesH
+package services
 
 type AuthHandler interface {
 	AuthorizationUser() error

@@ -8,5 +8,5 @@ type UserHandler interface {
 }
 
 func main() {
-	mainApp.MainApp("Добро пожаловать в соц-сеть БадаБум")
+	mainApp.MainApp("Добро пожаловать в  Блог")
 }
