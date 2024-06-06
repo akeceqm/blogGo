@@ -10,7 +10,7 @@ func MyProfile() {
 	choise := ""
 	User, err := database.GetByUserEmail(email)
 	if err != nil {
-		fmt.Println("Ошибка при получении данных пользователя:", err)
+		fmt.Println("ошибка при получении данных пользователя:", err)
 		return
 	}
 
@@ -47,7 +47,7 @@ func ChangePassword() {
 	fmt.Scan(&password)
 
 	passwordChecker := &CheckPasswordUser{}
-	err = passwordChecker.CheckPassword(password, repeatPassword, passwordLength)
+	err = passwordChecker.CheckPassword(password, passwordLength)
 	if err != nil {
 		fmt.Println(err)
 		return

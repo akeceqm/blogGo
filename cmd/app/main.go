@@ -1,12 +1,7 @@
 package main
 
-import "post/internal/services/mainApp"
-
-type UserHandler interface {
-	AuthorizationUser() error
-	RegistrationUser() error
-}
+import "post/internal/services"
 
 func main() {
-	mainApp.MainApp("Добро пожаловать в  Блог")
+	services.MainApp("Добро пожаловать с блог")
 }

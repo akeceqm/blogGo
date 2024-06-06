@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"post/internal/database/models"
+	"post/internal/middlewares"
 )
 
 var Users []models.User
@@ -25,7 +26,7 @@ func GetByUserEmail(email string) (*models.User, error) {
 func UpdateUserPassword(user *models.User, newPassword string) error {
 	for i, u := range Users {
 		if u.Email == user.Email {
-			Users[i].Password = newPassword // Обновляем пароль у пользователя в списке
+			Users[i].Password = string(middlewares.PasswordHash(newPassword)) // Обновляем пароль у пользователя в списке
 			return nil
 		}
 	}

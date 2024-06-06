@@ -21,7 +21,7 @@ func (c *CheckEmailUser) CheckEmail(email string) error {
 
 type CheckPasswordUser struct{}
 
-func (c *CheckPasswordUser) CheckPassword(password, repeatPassword string, passwordLenght int) error {
+func (c *CheckPasswordUser) CheckPassword(password string, passwordLenght int) error {
 	if len(password) < passwordLenght {
 		str := strconv.Itoa(passwordLenght)
 		middlewares.ClearScreen()

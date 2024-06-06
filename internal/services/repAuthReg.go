@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"fmt"
 	"post/internal/database"
 	"post/internal/database/models"
@@ -10,46 +9,41 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthHandlerImpl struct{}
-
-var (
-	name           string
-	email          string
-	password       string
-	repeatPassword string
-	passwordLength int = 8
-	err            error
-)
-
-func (ah AuthHandlerImpl) AuthorizationUser() error {
+func AuthorizationUser() error {
 	database.GetAllUsersCopy()
 
 	fmt.Print("Введите свой email: ")
 	fmt.Scan(&email)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
 	var user *models.User
-	for i := range database.Users {
-		if database.Users[i].Email == email {
-			user = &database.Users[i]
-			break
+	if len(database.Users) == 0 {
+		middlewares.ClearScreen()
+		fmt.Println("в нашей соц-сети отсутсвуют юзеры.\nБудьте первыми!\n")
+		return err
+	} else {
+		for i := range database.Users {
+			if database.Users[i].Email == email {
+				user = &database.Users[i]
+			} else {
+				fmt.Println("Такого email нет в базе данных!")
+				return err
+			}
 		}
 	}
-
-	if user == nil {
-		return errors.New("Такого email нет в базе данных!")
-	}
-
 	fmt.Print("Введите свой пароль: ")
 	fmt.Scan(&password)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return errors.New("Неверный пароль")
+		fmt.Println("Неверный пароль")
+		return err
 	}
 	middlewares.ClearScreen()
 	fmt.Printf("Пользователь %s успешно авторизован!\n", user.Name)
@@ -57,9 +51,7 @@ func (ah AuthHandlerImpl) AuthorizationUser() error {
 	return nil
 }
 
-type RegistrationUserItmpl struct{}
-
-func (ru *RegistrationUserItmpl) RegistrationUser() error {
+func RegistrationUser() error {
 	database.GetAllUsersCopy()
 
 	var User models.User
@@ -82,7 +74,7 @@ func (ru *RegistrationUserItmpl) RegistrationUser() error {
 	fmt.Scan(&password)
 
 	passwordChecker := &CheckPasswordUser{}
-	err = passwordChecker.CheckPassword(password, repeatPassword, passwordLength)
+	err = passwordChecker.CheckPassword(password, passwordLength)
 	if err != nil {
 		fmt.Println(err)
 		return nil
