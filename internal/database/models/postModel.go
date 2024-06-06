@@ -1,23 +1,24 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Post struct {
 	Id          int
 	Title       string
 	Description string
 	Data        time.Time
-	Author      string
+	Author      User
 	IdUser      int
+	Comment     []Comment
 }
 
 type Comment struct {
-	Id            int
-	Description   string
-	Data          time.Time
-	Author        string
-	PostConnected string
-	IdUser        int
+	Id          int
+	Description string
+	Data        time.Time
+	Author      string
+	PostId      string
+	UserId      int
 }
-
-type Lice struct{}

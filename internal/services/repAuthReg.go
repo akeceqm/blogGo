@@ -5,6 +5,7 @@ import (
 	"post/internal/database"
 	"post/internal/database/models"
 	"post/internal/middlewares"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,6 +21,9 @@ func AuthorizationUser() error {
 	}
 
 	var user *models.User
+	userFound := false
+	var UserActive models.User
+
 	if len(database.Users) == 0 {
 		middlewares.ClearScreen()
 		fmt.Println("в нашей соц-сети отсутсвуют юзеры.\nБудьте первыми!\n")
@@ -28,12 +32,19 @@ func AuthorizationUser() error {
 		for i := range database.Users {
 			if database.Users[i].Email == email {
 				user = &database.Users[i]
-			} else {
-				fmt.Println("Такого email нет в базе данных!")
-				return err
+				UserActive = database.Users[i]
+				userFound = true
 			}
 		}
 	}
+
+	database.PutActive(UserActive)
+
+	if !userFound {
+		fmt.Println("Такого email нет в базе данных!")
+		return err
+	}
+
 	fmt.Print("Введите свой пароль: ")
 	fmt.Scan(&password)
 	if err != nil {
@@ -45,7 +56,15 @@ func AuthorizationUser() error {
 		fmt.Println("Неверный пароль")
 		return err
 	}
+
 	middlewares.ClearScreen()
+
+	for _, val := range database.Users {
+		if val.Email == email {
+			database.Active = val
+		}
+	}
+
 	fmt.Printf("Пользователь %s успешно авторизован!\n", user.Name)
 	MainFunction()
 	return nil
@@ -92,9 +111,10 @@ func RegistrationUser() error {
 
 	User.Password = string(middlewares.PasswordHash(password))
 	User.Ip = middlewares.GetApi()
-	// Добавление пользователя
+	User.Data = time.Now()
+
 	database.Users = append(database.Users, User)
 	middlewares.ClearScreen()
-	fmt.Printf("name: %s \nemail: %s \npassword: %s \nip: %s \n", User.Name, User.Email, User.Password, User.Ip)
+	fmt.Printf("name: %s \nemail: %s \npassword: %s \nip: %s \nD", User.Name, User.Email, User.Password, User.Ip)
 	return nil
 }

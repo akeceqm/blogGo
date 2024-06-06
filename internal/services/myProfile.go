@@ -14,7 +14,7 @@ func MyProfile() {
 		return
 	}
 
-	fmt.Printf("Name: %s \nEmail: %s\n[*] Сменить пароль\n[!] Выйти\n", User.Name, User.Email)
+	fmt.Printf("Name: %s \nEmail: %s\nДата регистрации аккаунта: %s\n[*] Сменить пароль\n[!] Выйти\n", User.Name, User.Email, User.Data.Format("02.01.2006 15:04"))
 	fmt.Print("Введите вариант: ")
 	fmt.Scan(&choise)
 

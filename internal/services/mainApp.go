@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"post/internal/database"
 	"post/internal/middlewares"
 )
 
@@ -16,7 +17,7 @@ func MainApp(messageToUser string) {
 
 	for {
 		choise := ""
-		fmt.Println("[1] Регистрация\n[2] Авторизация\n[3]Просмотреть посты пользователей\n[4] Закрыть приложение")
+		fmt.Println("[1] Регистрация\n[2] Авторизация\n[3] Просмотреть посты пользователей\n[4] Закрыть приложение")
 		fmt.Print("Введите номер действия чтобы продолжить: ")
 		fmt.Scan(&choise)
 
@@ -27,7 +28,7 @@ func MainApp(messageToUser string) {
 		case "2":
 			AuthorizationUser()
 		case "3":
-			fmt.Println("Функция пока не реализована")
+			database.PostAllView()
 		case "4":
 			fmt.Println("Закрытие приложения...")
 			return
