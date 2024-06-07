@@ -112,3 +112,17 @@ func DelPost(id string) error {
 	}
 	return errors.New("Введи корректный id")
 }
+
+func GetPostsForComments() {
+	for _, val := range Posts {
+		fmt.Printf("Id: %s\nНазвание: %s\n", val.Id, val.Title)
+		return
+	}
+}
+
+func GetComment() {
+	for _, val := range Comments {
+		fmt.Printf("Id: %s\nId поста: %s\nТекст комментария: %s\nАвтор коментария: %s", val.Id, val.PostId, val.Description, val.Author.Name)
+		return
+	}
+}

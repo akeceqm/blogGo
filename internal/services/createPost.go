@@ -14,10 +14,6 @@ func CreatePost() error {
 	Post.Id = middlewares.GenerateId(6)
 	fmt.Print("Введите название поста: ")
 	title := middlewares.ReadString()
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
 
 	Post.Title = title
 

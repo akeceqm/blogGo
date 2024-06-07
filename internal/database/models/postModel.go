@@ -15,10 +15,9 @@ type Post struct {
 }
 
 type Comment struct {
-	Id          int
+	Id          string
 	Description string
 	Data        time.Time
-	Author      string
+	Author      User
 	PostId      string
-	UserId      int
 }
