@@ -1,10 +1,12 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"post/internal/database"
 	"post/internal/database/models"
 	"post/internal/middlewares"
+	"regexp"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -87,6 +89,12 @@ func RegistrationUser() error {
 		fmt.Println(err)
 		return nil
 	}
+
+	if !isEmailValid(email) {
+		fmt.Println("Неверный формат электронной почты")
+		return errors.New("неверный формат электронной почты")
+	}
+
 	User.Email = email
 
 	fmt.Print("Введите свой пароль: ")
@@ -115,6 +123,11 @@ func RegistrationUser() error {
 
 	database.Users = append(database.Users, User)
 	middlewares.ClearScreen()
-	fmt.Printf("name: %s \nemail: %s \npassword: %s \nip: %s \nD", User.Name, User.Email, User.Password, User.Ip)
+	fmt.Printf("name: %s \nemail: %s \npassword: %s \nip: %s \n", User.Name, User.Email, User.Password, User.Ip)
 	return nil
+}
+
+func isEmailValid(email string) bool {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	return emailRegex.MatchString(email)
 }

@@ -52,7 +52,12 @@ func UpdateUserPassword(user *models.User, newPassword string) error {
 func PosMytView() {
 	for _, val := range Posts {
 		if val.Author == GetActive() {
-			fmt.Printf("Id: %s\nНазвание: %s\nОписание: %s\nДата публикации: %s\nКомментарев: %d\n", val.Id, val.Title, val.Description, val.Data.Format("02.01.2006 15:04"), len(val.Comment))
+			fmt.Printf("Id: %s\nНазвание: %s\n\nОписание: %s\nДата публикации: %s\nКомментарев: %d\n",
+				val.Id,
+				middlewares.TextFormatter(struct{ Text string }{val.Title}),
+				middlewares.TextFormatter(struct{ Text string }{val.Description}),
+				val.Data.Format("02.01.2006 15:04"),
+				len(val.Comment))
 		}
 	}
 }
@@ -69,11 +74,29 @@ func GetLenMyPost() int {
 	return count
 }
 
+func GetLenMyComment() int {
+	var count = 0
+	for _, val := range Comments {
+		if val.Author == GetActive() {
+			for i := 0; i < len(Comments); i++ {
+				count++
+			}
+		}
+	}
+	return count
+}
+
 func PostAllView() {
 	totalPosts := len(Posts)
 	if totalPosts > 0 {
 		for i, val := range Posts {
-			fmt.Printf("Название: %s\nОписание: %s\nДата публикации: %s\nКоментариев: %d\n *Автор: %s\n", val.Title, val.Description, val.Data.Format("02.01.2006 15:04"), len(val.Comment), val.Author.Name)
+			fmt.Printf("Название: %s\nОписание: %s\n\nДата публикации: %s\nКоментариев: %d\nАвтор: %s\n",
+				middlewares.TextFormatter(struct{ Text string }{val.Title}),
+				middlewares.TextFormatter(struct{ Text string }{val.Description}),
+				val.Data.Format("02.01.2006 15:04"),
+				len(val.Comment),
+				val.Author.Name,
+			)
 			if i < totalPosts-1 {
 				fmt.Println()
 			}
@@ -122,7 +145,37 @@ func GetPostsForComments() {
 
 func GetComment() {
 	for _, val := range Comments {
-		fmt.Printf("Id: %s\nId поста: %s\nТекст комментария: %s\nАвтор коментария: %s", val.Id, val.PostId, val.Description, val.Author.Name)
+		fmt.Printf("Id: %s\nId поста: %s\nТекст комментария: %s\nАвтор коментария: %s\nДата публикации: %s", val.Id, val.PostId, val.Description, val.Author.Name, val.Data.Format("02.01.2006 15:04"))
 		return
+	}
+}
+
+func DelComment(id string) error {
+	for indx, val := range Comments {
+		if val.Id == id {
+			Comments = append(Comments[:indx], Comments[indx+1:]...)
+			return nil
+		}
+	}
+	return errors.New("Введи корректный id")
+}
+
+func PutComment(id, description string) {
+	for index, val := range Comments {
+		if val.Id == id {
+			Comments[index].Description = description
+			if description == "" {
+				fmt.Println("Ошибка! Введите хотя бы 1 символ")
+				break
+			}
+		}
+	}
+}
+
+func CommentMytView() {
+	for _, val := range Comments {
+		if val.Author == GetActive() {
+			fmt.Printf("Id: %s\nId коммента: %s\nТекст: %s\nАвтор коментария: %s\nДата публикации: %s\n", val.Id, val.PostId, val.Description, val.Author.Name, val.Data.Format("02.01.2006 15:04"))
+		}
 	}
 }
