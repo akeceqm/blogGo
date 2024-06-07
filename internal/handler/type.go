@@ -1,14 +1,10 @@
 package handler
 
-import (
-	"bufio"
-	"os"
-)
-
 var (
-	title       string
-	description string
-	err         error
+	name           string
+	email          string
+	password       string
+	repeatPassword string
+	passwordLength int = 8
+	err            error
 )
-
-var read = bufio.NewReader(os.Stdin)

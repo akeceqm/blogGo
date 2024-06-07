@@ -11,6 +11,7 @@ import (
 func CreatePost() error {
 
 	var Post models.Post
+	Post.Id = middlewares.GenerateId(6)
 	fmt.Print("Введите название поста: ")
 	title := middlewares.ReadString()
 	if err != nil {

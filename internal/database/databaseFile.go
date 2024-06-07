@@ -11,6 +11,7 @@ var Users []models.User
 var Posts []models.Post
 var Comments []models.Comment
 var Active models.User
+var err error
 
 func GetAllUsersCopy() *[]models.User {
 	return &Users
@@ -51,16 +52,28 @@ func UpdateUserPassword(user *models.User, newPassword string) error {
 func PosMytView() {
 	for _, val := range Posts {
 		if val.Author == GetActive() {
-			fmt.Printf("Название: %s\nОписание: %s\nДата публикации: %s\n\n", val.Title, val.Description, val.Data.Format("02.01.2006 15:04"))
+			fmt.Printf("Id: %s\nНазвание: %s\nОписание: %s\nДата публикации: %s\nКомментарев: %d\n", val.Id, val.Title, val.Description, val.Data.Format("02.01.2006 15:04"), len(val.Comment))
 		}
 	}
+}
+
+func GetLenMyPost() int {
+	var count = 0
+	for _, val := range Posts {
+		if val.Author == GetActive() {
+			for i := 0; i < len(val.Comment); i++ {
+				count++
+			}
+		}
+	}
+	return count
 }
 
 func PostAllView() {
 	totalPosts := len(Posts)
 	if totalPosts > 0 {
 		for i, val := range Posts {
-			fmt.Printf("Название: %s\nОписание: %s\nДата публикации: %s\n *Автор: %s\n", val.Title, val.Description, val.Data.Format("02.01.2006 15:04"), val.Author.Name)
+			fmt.Printf("Название: %s\nОписание: %s\nДата публикации: %s\nКоментариев: %d\n *Автор: %s\n", val.Title, val.Description, val.Data.Format("02.01.2006 15:04"), len(val.Comment), val.Author.Name)
 			if i < totalPosts-1 {
 				fmt.Println()
 			}
@@ -68,4 +81,34 @@ func PostAllView() {
 	} else {
 		fmt.Println("Нет доступных постов.")
 	}
+}
+
+func PutPost(id, title, description string) {
+	for index, val := range Posts {
+		if val.Id == id {
+			Posts[index].Title = title
+			if title == "" {
+				fmt.Println("Ошибка! Введите хотя бы 1 символ")
+				break
+			}
+
+			Posts[index].Description = description
+
+			if description == "" {
+				fmt.Println("Ошибка! Введите хотя бы 1 символ")
+				break
+			}
+
+		}
+	}
+}
+
+func DelPost(id string) error {
+	for indx, val := range Posts {
+		if val.Id == id {
+			Posts = append(Posts[:indx], Posts[indx+1:]...)
+			return nil
+		}
+	}
+	return errors.New("Введи корректный id")
 }

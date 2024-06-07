@@ -7,39 +7,39 @@ import (
 )
 
 func MyProfile() {
-	choise := ""
-	User, err := database.GetByUserEmail(email)
-	if err != nil {
-		fmt.Println("ошибка при получении данных пользователя:", err)
-		return
-	}
-
-	fmt.Printf("Name: %s \nEmail: %s\nДата регистрации аккаунта: %s\n[*] Сменить пароль\n[!] Выйти\n", User.Name, User.Email, User.Data.Format("02.01.2006 15:04"))
-	fmt.Print("Введите вариант: ")
-	fmt.Scan(&choise)
-
-	switch choise {
-	case "*":
-		fmt.Println("Вы уверены что хотите сменить пароль?")
-		fmt.Print("Если *да* то нажмите [1] если *нет* то нажмите [2]: ")
-		fmt.Scan(&choise)
-		switch choise {
-		case "1":
-			middlewares.ClearScreen()
-			ChangePassword()
-		case "2":
-			MyProfile()
-		default:
-			middlewares.ClearScreen()
-			fmt.Println("Введите правильный знак")
-			MyProfile()
+	for {
+		choice := ""
+		User, err := database.GetByUserEmail(database.GetActive().Email)
+		if err != nil {
+			fmt.Println("ошибка при получении данных пользователя:", err)
+			return
 		}
 
-	case "!":
-		MainFunction()
-	default:
-		fmt.Println("Введите правильный знак")
+		fmt.Printf("Name: %s \nEmail: %s\nДата регистрации аккаунта: %s\n[*] Сменить пароль\n[!] Выйти\n", User.Name, User.Email, User.Data.Format("02.01.2006 15:04"))
+		fmt.Print("Введите вариант: ")
+		fmt.Scan(&choice)
+
+		if choice == "*" {
+			fmt.Println("Вы уверены что хотите сменить пароль?")
+			fmt.Print("Если *да* то нажмите [1] если *нет* то нажмите [2]: ")
+			fmt.Scan(&choice)
+
+			if choice == "1" {
+				middlewares.ClearScreen()
+				ChangePassword()
+			} else if choice == "2" {
+				break
+			} else {
+				middlewares.ClearScreen()
+				fmt.Println("Введите правильный знак")
+			}
+		} else if choice == "!" {
+			MainFunction()
+		} else {
+			fmt.Println("Введите правильный знак")
+		}
 	}
+
 }
 
 func ChangePassword() {
@@ -63,13 +63,12 @@ func ChangePassword() {
 		return
 	}
 
-	user, err := database.GetByUserEmail(email) // Получаем пользователя по электронной почте
+	user, err := database.GetByUserEmail(email)
 	if err != nil {
 		fmt.Println("Ошибка при получении пользователя:", err)
 		return
 	}
 
-	// Обновляем пароль пользователя
 	err = database.UpdateUserPassword(user, password)
 	if err != nil {
 		fmt.Println("Ошибка при обновлении пароля:", err)
