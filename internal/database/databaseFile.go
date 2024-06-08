@@ -9,7 +9,7 @@ import (
 var Active models.User
 var err error
 
-var ConnectionString = "user=postgres password=akeceqm dbname=society sslmode=disable"
+var ConnectionString = "user=postgres password=123456 dbname=society sslmode=disable"
 
 func InitDb(connectionString string) (*sqlx.DB, error) {
 	db, err := sqlx.Open("postgres", connectionString)
