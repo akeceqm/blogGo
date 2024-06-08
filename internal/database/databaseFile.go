@@ -1,181 +1,21 @@
 package database
 
 import (
-	"errors"
-	"fmt"
+	"github.com/jmoiron/sqlx"
+	"log"
 	"post/internal/database/models"
-	"post/internal/middlewares"
 )
 
-var Users []models.User
-var Posts []models.Post
-var Comments []models.Comment
 var Active models.User
 var err error
 
-func GetAllUsersCopy() *[]models.User {
-	return &Users
-}
+var ConnectionString = "user=postgres password=akeceqm dbname=society sslmode=disable"
 
-func GetByUserEmail(email string) (*models.User, error) {
-	for _, user := range Users {
-		if user.Email == email {
-			return &user, nil
-		}
+func InitDb(connectionString string) (*sqlx.DB, error) {
+	db, err := sqlx.Open("postgres", connectionString)
+	if err != nil {
+		log.Fatalln("Неудачевя попытка соединения с бд")
+		return nil, err
 	}
-	return nil, nil
-}
-
-func GetActive() models.User {
-	return Active
-}
-
-func DelActive() models.User {
-	Active = models.User{}
-	return Active
-}
-
-func PutActive(User models.User) {
-	Active = User
-}
-
-func UpdateUserPassword(user *models.User, newPassword string) error {
-	for i, u := range Users {
-		if u.Email == user.Email {
-			Users[i].Password = string(middlewares.PasswordHash(newPassword)) // Обновляем пароль у пользователя в списке
-			return nil
-		}
-	}
-	return errors.New("Пользователь не найден")
-}
-
-func PosMytView() {
-	for _, val := range Posts {
-		if val.Author == GetActive() {
-			fmt.Printf("Id: %s\nНазвание: %s\n\nОписание: %s\nДата публикации: %s\nКомментарев: %d\n",
-				val.Id,
-				middlewares.TextFormatter(struct{ Text string }{val.Title}),
-				middlewares.TextFormatter(struct{ Text string }{val.Description}),
-				val.Data.Format("02.01.2006 15:04"),
-				len(val.Comment))
-		}
-	}
-}
-
-func GetLenMyPost() int {
-	var count = 0
-	for _, val := range Posts {
-		if val.Author == GetActive() {
-			for i := 0; i < len(val.Comment); i++ {
-				count++
-			}
-		}
-	}
-	return count
-}
-
-func GetLenMyComment() int {
-	var count = 0
-	for _, val := range Comments {
-		if val.Author == GetActive() {
-			for i := 0; i < len(Comments); i++ {
-				count++
-			}
-		}
-	}
-	return count
-}
-
-func PostAllView() {
-	totalPosts := len(Posts)
-	if totalPosts > 0 {
-		for i, val := range Posts {
-			fmt.Printf("Название: %s\nОписание: %s\n\nДата публикации: %s\nКоментариев: %d\nАвтор: %s\n",
-				middlewares.TextFormatter(struct{ Text string }{val.Title}),
-				middlewares.TextFormatter(struct{ Text string }{val.Description}),
-				val.Data.Format("02.01.2006 15:04"),
-				len(val.Comment),
-				val.Author.Name,
-			)
-			if i < totalPosts-1 {
-				fmt.Println()
-			}
-		}
-	} else {
-		fmt.Println("Нет доступных постов.")
-	}
-}
-
-func PutPost(id, title, description string) {
-	for index, val := range Posts {
-		if val.Id == id {
-			Posts[index].Title = title
-			if title == "" {
-				fmt.Println("Ошибка! Введите хотя бы 1 символ")
-				break
-			}
-
-			Posts[index].Description = description
-
-			if description == "" {
-				fmt.Println("Ошибка! Введите хотя бы 1 символ")
-				break
-			}
-
-		}
-	}
-}
-
-func DelPost(id string) error {
-	for indx, val := range Posts {
-		if val.Id == id {
-			Posts = append(Posts[:indx], Posts[indx+1:]...)
-			return nil
-		}
-	}
-	return errors.New("Введи корректный id")
-}
-
-func GetPostsForComments() {
-	for _, val := range Posts {
-		fmt.Printf("Id: %s\nНазвание: %s\n", val.Id, val.Title)
-		return
-	}
-}
-
-func GetComment() {
-	for _, val := range Comments {
-		fmt.Printf("Id: %s\nId поста: %s\nТекст комментария: %s\nАвтор коментария: %s\nДата публикации: %s", val.Id, val.PostId, val.Description, val.Author.Name, val.Data.Format("02.01.2006 15:04"))
-		return
-	}
-}
-
-func DelComment(id string) error {
-	for indx, val := range Comments {
-		if val.Id == id {
-			Comments = append(Comments[:indx], Comments[indx+1:]...)
-			return nil
-		}
-	}
-	return errors.New("Введи корректный id")
-}
-
-func PutComment(id, description string) {
-	for index, val := range Comments {
-		if val.Id == id {
-			Comments[index].Description = description
-			if description == "" {
-				fmt.Println("Ошибка! Введите хотя бы 1 символ")
-				break
-			}
-		}
-	}
-}
-
-func CommentMytView() {
-	for _, val := range Comments {
-		if val.Author == GetActive() {
-			fmt.Printf("Id: %s\nId коммента: %s\nТекст: %s\nАвтор коментария: %s\nДата публикации: %s\n", val.Id, val.PostId, val.Description, val.Author.Name, val.Data.Format("02.01.2006 15:04"))
-		}
-	}
+	return db, nil
 }

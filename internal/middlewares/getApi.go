@@ -11,7 +11,7 @@ import (
 func GetApi() string {
 	resp, err := http.Get("https://api.ipify.org?format=json")
 	if err != nil {
-		log.Printf("Unable to grab the data from the Api Endpoint:%w", err.Error())
+		log.Printf("Увы без ip:%w", err.Error())
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
