@@ -8,22 +8,22 @@ import (
 	"post/internal/database/models"
 )
 
-func GetApi() (string, error) {
+func GetApi() string {
 	resp, err := http.Get("https://api.ipify.org?format=json")
 	if err != nil {
 		log.Printf("Увы без ip:%w", err.Error())
-		return "", err
+		return err.Error()
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return err.Error()
 	}
 
 	var ipResp models.IPResponse
 	err = json.Unmarshal(data, &ipResp)
 	if err != nil {
-		return "", err
+		return err.Error()
 	}
-	return ipResp.IP, nil
+	return ipResp.IP
 }
