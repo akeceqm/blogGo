@@ -22,6 +22,7 @@ func main() {
 	err = StartMain(cmd.Server)
 	if err != nil {
 		log.Fatalln("Неудачный запуск сервера")
+		return
 	}
 }
 
