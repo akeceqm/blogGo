@@ -5,10 +5,11 @@ import (
 	"post/internal/middlewares"
 )
 
-func GenerateId(id []byte) error {
-	if err = middlewares.GenerateString(idLenght, id, idSet); err != nil {
-		fmt.Println("Не удалось сгенерировать id")
-		return err
+func GenerateId() (string, error) {
+	password, err := middlewares.GenerateString(idLenght, idSet)
+	if err != nil {
+		fmt.Println("Не удалось сгенерировать id:", err)
+		return "", err
 	}
-	return nil
+	return password, nil
 }

@@ -2,9 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 	"log"
 	"post/cmd"
 	"post/internal/database"
+	"post/internal/handler/handlerUser"
 )
 
 func main() {
@@ -16,14 +18,20 @@ func main() {
 	}
 	defer db.Close()
 
-	StartMain(cmd.Server)
+	cmd.Server.GET("/users", func(c *gin.Context) {
+		handlerUser.GetUsers(c, db)
+	})
+
+	cmd.Server.POST("/users", func(c *gin.Context) {
+		handlerUser.PostUser(c, db)
+	})
+	err = StartMain(cmd.Server)
+	if err != nil {
+		log.Fatalln("Неудачевя попытка запуска сервера")
+	}
 }
 
 func StartMain(server *gin.Engine) error {
-	if err := server.Run(":8080"); err != nil {
-		log.Fatalln("Сервер не запущен!")
-		return err
-	}
-	log.Println("Сервер успещно запущен!")
-	return nil
+	log.Println("Сервер запущен")
+	return server.Run(":8080")
 }
