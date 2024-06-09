@@ -1,24 +1,19 @@
 package middlewares
 
-<<<<<<< Updated upstream
-import "golang.org/x/crypto/bcrypt"
-=======
 import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func PasswordHash(password string) []byte {
+func PasswordHash(password string) string {
 
 	if password == "" {
-		fmt.Println("password пустая ")
-
+		fmt.Println("password пустая " + err.Error())
+		return err.Error()
 	}
->>>>>>> Stashed changes
 
-func PasswordHash(password string) []byte {
 	passwordHash := []byte(password)
 	cost := 12
 	hash, _ := bcrypt.GenerateFromPassword(passwordHash, cost)
-	return hash
+	return string(hash)
 }

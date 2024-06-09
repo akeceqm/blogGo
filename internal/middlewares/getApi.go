@@ -13,7 +13,6 @@ func GetApi() string {
 	if err != nil {
 		log.Printf("Увы без ip:%w", err.Error())
 		return err.Error()
-
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
