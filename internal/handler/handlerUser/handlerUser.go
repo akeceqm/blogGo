@@ -28,25 +28,11 @@ func PostUser(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	password, err := services.GeneratePassword()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate password"})
-		return
-	}
-
-	id, err := services.GenerateId()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate id"})
-		return
-	}
+	password := services.GeneratePassword()
+	id := services.GenerateId()
 
 	currentTime := time.Now()
-	_, err = db.Exec(`INSERT INTO public.user (id, login,email, password_hash,id_address,date_registration) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`, id, user.Email, user.Login, middlewares.PasswordHash(password), middlewares.GetApi(), currentTime)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
-		return
-	}
-
+	_, err := db.Exec(`INSERT INTO public.user (id, login,email, password_hash,id_address,date_registration) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`, id, user.Email, user.Login, middlewares.PasswordHash(password), middlewares.GetApi(), currentTime)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
