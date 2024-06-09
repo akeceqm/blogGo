@@ -3,15 +3,16 @@ package services
 import (
 	"github.com/jmoiron/sqlx"
 	"post/internal/database/models"
+	"strconv"
 	"time"
 )
 
-func CreatePost(title, text string, authorId int, db *sqlx.DB) error {
+func CreatePost(title, text string, authorId int, db *sqlx.DB) (models.Post, error) {
 	post := models.Post{}
 
-	err := db.Get("SELECT * FROM post WHERE id = $1", string(authorId))
+	_, err := db.Exec("SELECT * FROM public.user WHERE id = $1", strconv.Itoa(authorId))
 	if err != nil {
-		return err
+		return models.Post{}, err
 	}
 
 	post.Id = GenerateId()
@@ -20,12 +21,12 @@ func CreatePost(title, text string, authorId int, db *sqlx.DB) error {
 	post.DateCreated = time.Now()
 	post.AuthorId = authorId
 
-	_, err = db.Exec("INSERT INTO post (id, title, text, date, author_id) VALUES ($1, $2, $3, $4, $5)", post.Id, post.Title, post.Text, post.DateCreated, post.AuthorId)
+	_, err = db.Exec("INSERT INTO post (id, title, text, date_created, author_id) VALUES ($1, $2, $3, $4, $5)", post.Id, post.Title, post.Text, post.DateCreated, post.AuthorId)
 	if err != nil {
-		return err
+		return models.Post{}, err
 	}
 
-	return nil
+	return post, nil
 }
 
 func GetPost(db *sqlx.DB) ([]models.Post, error) {

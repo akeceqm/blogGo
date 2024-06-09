@@ -25,13 +25,13 @@ func HandlePostPOST(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	err := services.CreatePost(newPost.Title, newPost.Text, newPost.AuthorId, db)
+	createdPost, err := services.CreatePost(newPost.Title, newPost.Text, newPost.AuthorId, db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"Success": "Post created"})
+	c.JSON(http.StatusOK, gin.H{"Post": createdPost, "Success": "Post created"})
 	return
 }
 
