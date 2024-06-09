@@ -7,17 +7,16 @@ import (
 type Post struct {
 	Id          string
 	Title       string
-	Description string
-	Data        time.Time
-	Author      User
-	IdUser      int
+	Text        string
+	DateCreated time.Time `db:"date_created" json:"date_created"`
+	AuthorId    int       `db:"author_id" json:"author_id"`
 	Comment     []Comment
 }
 
 type Comment struct {
-	Id          string
-	Description string
-	Data        time.Time
-	Author      User
-	PostId      string
+	Id         string
+	Text       string
+	DateCreate time.Time `db:"date_created" json:"date_created"`
+	AuthorId   int       `db:"author_id" json:"author_id"`
+	PostId     string
 }

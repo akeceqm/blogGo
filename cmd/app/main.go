@@ -5,6 +5,7 @@ import (
 	"log"
 	"post/cmd"
 	"post/internal/database"
+	"post/internal/handler"
 )
 
 func main() {
@@ -16,14 +17,15 @@ func main() {
 	}
 	defer db.Close()
 
-	StartMain(cmd.Server)
+	handler.InitRoutes(cmd.Server, db)
+
+	err = StartMain(cmd.Server)
+	if err != nil {
+		log.Fatalln("Неудачный запуск сервера")
+	}
 }
 
 func StartMain(server *gin.Engine) error {
-	if err := server.Run(":8080"); err != nil {
-		log.Fatalln("Сервер не запущен!")
-		return err
-	}
-	log.Println("Сервер успещно запущен!")
-	return nil
+	log.Println("Сервер запущен")
+	return server.Run(":8080")
 }
