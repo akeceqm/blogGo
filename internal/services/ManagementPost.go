@@ -3,7 +3,6 @@ package services
 import (
 	"github.com/jmoiron/sqlx"
 	"post/internal/database/models"
-	"post/internal/middlewares"
 	"time"
 )
 
@@ -15,7 +14,7 @@ func CreatePost(title, text string, authorId int, db *sqlx.DB) error {
 		return err
 	}
 
-	post.Id = middlewares.GenerateId()
+	post.Id = GenerateId()
 	post.Title = title
 	post.Text = text
 	post.DateCreated = time.Now()

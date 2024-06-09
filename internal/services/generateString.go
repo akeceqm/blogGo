@@ -1,4 +1,4 @@
-package middlewares
+package services
 
 import (
 	"math/rand"
