@@ -6,6 +6,8 @@ import (
 	"log"
 	"post/cmd"
 	"post/internal/database"
+	"post/internal/handler/handlerUser"
+)
 
 func main() {
 	cmd.Server = gin.Default()
@@ -15,7 +17,7 @@ func main() {
 		return
 	}
 	defer db.Close()
-	
+
 	cmd.Server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetUsers(c, db)
 	})
@@ -26,8 +28,8 @@ func main() {
 	err = StartMain(cmd.Server)
 	if err != nil {
 		log.Fatalln("Неудачевя попытка запуска сервера")
+	}
 }
-
 func StartMain(server *gin.Engine) error {
 	log.Println("Сервер запущен")
 	return server.Run(":8080")

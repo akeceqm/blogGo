@@ -1,6 +1,5 @@
 package services
 
-<<<<<<< HEAD
 import (
 	"fmt"
 	"post/internal/middlewares"
