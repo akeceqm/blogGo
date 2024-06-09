@@ -2,17 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
 	"log"
+	"post/cmd"
 	"post/internal/database"
 )
 
-var server *gin.Engine
-var db *sqlx.DB
-var err error
-
 func main() {
-	server = gin.Default()
+	cmd.Server = gin.Default()
 	db, err := database.InitDb(database.ConnectionString)
 	if err != nil {
 		log.Fatalln("Неудачевя попытка соединения с бд")
@@ -20,7 +16,7 @@ func main() {
 	}
 	defer db.Close()
 
-	StartMain(server)
+	StartMain(cmd.Server)
 }
 
 func StartMain(server *gin.Engine) error {
