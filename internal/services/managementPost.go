@@ -9,7 +9,8 @@ import (
 func CreatePost(title, text string, authorId int, db *sqlx.DB) (models.Post, error) {
 	post := models.Post{}
 
-	err := db.Get("SELECT * FROM public.user WHERE id = $1", string(authorId))
+	err := db.Get("SELECT * FROM public.post WHERE id = $1", string(authorId))
+
 	if err != nil {
 		return models.Post{}, err
 	}

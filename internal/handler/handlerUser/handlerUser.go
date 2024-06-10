@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func GetUsers(c *gin.Context, db *sqlx.DB) {
+func GetHandleUsers(c *gin.Context, db *sqlx.DB) {
 	var users []models.User
 	err := db.Select(&users, `SELECT *FROM public.user`)
 	if err != nil {

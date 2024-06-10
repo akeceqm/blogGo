@@ -4,12 +4,23 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"post/internal/handler/handlerPost"
+
+	"post/internal/handler/handlerUser"
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
+	// Рабоат с юзером
+	server.GET("/users", func(c *gin.Context) {
+		handlerUser.GetHandleUsers(c, db)
+	})
+	server.POST("/users/authorization", func(c *gin.Context) {
+		handlerUser.PostHandleAuthorizationUser(c, db)
+	})
+	server.POST("/users/registration", func(c *gin.Context) {
+		handlerUser.PostHandleRegistrationUser(c, db)
+	})
 
 	// запросы ПОСТОВ
-
 	server.GET("/posts", func(c *gin.Context) {
 		handlerPost.GETHandlePost(c, db)
 	})
@@ -33,4 +44,5 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	server.DELETE("/posts/:id", func(c *gin.Context) {
 		handlerPost.DELETEHandlePost(c, db)
 	})
+
 }
