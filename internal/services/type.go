@@ -1,8 +1,11 @@
 package services
 
 var (
-	idSet              = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	passwordSet        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!!!!!!!!@@@@@@@@@@@@%%%%%%%%%%%%%%%%%))))))))))&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^(((((((((((((????????????"
-	idLenght       int = 32
-	passwordLenght int = 20
+	idSet                 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	idLenght       int    = 32
+	passwordSet           = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!!!!!@@@@@@@@%%%%%%%&&&&&&&&&^^^^^^^^^^^^????????"
+	passwordLenght int    = 20
+	loginSet              = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	loginLenght    int    = 20
+	dateFormat     string = "2006-01-02 15:04:05"
 )

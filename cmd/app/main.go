@@ -6,7 +6,7 @@ import (
 	"log"
 	"post/cmd"
 	"post/internal/database"
-	"post/internal/handler/handlerUser"
+	"post/internal/handler"
 )
 
 func main() {
@@ -18,18 +18,14 @@ func main() {
 	}
 	defer db.Close()
 
-	cmd.Server.GET("/users", func(c *gin.Context) {
-		handlerUser.GetUsers(c, db)
-	})
+	handler.InitRoutes(cmd.Server, db)
 
-	cmd.Server.POST("/users", func(c *gin.Context) {
-		handlerUser.PostUser(c, db)
-	})
 	err = StartMain(cmd.Server)
 	if err != nil {
-		log.Fatalln("Неудачевя попытка запуска сервера")
+		log.Fatalln("Неудачный запуск сервера")
 	}
 }
+
 func StartMain(server *gin.Engine) error {
 	log.Println("Сервер запущен")
 	return server.Run(":8080")
