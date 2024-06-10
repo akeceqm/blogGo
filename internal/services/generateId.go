@@ -1,7 +1,11 @@
 package services
 
-import "post/internal/middlewares"
+
+import (
+	"post/internal/middlewares"
+)
 
 func GenerateId() string {
-	return middlewares.GenerateString(idLenght, idSet)
+	id := middlewares.GenerateString(passwordLenght, passwordSet)
+	return id
 }
