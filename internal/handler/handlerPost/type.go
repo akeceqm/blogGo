@@ -1,5 +1,5 @@
 package handlerPost
 
 var (
-	customFormat = "02-01-2006 15:04:05"
+	customFormat = "2006-01-02_15:04:05"
 )
