@@ -10,6 +10,7 @@ func CreatePost(title, text string, authorId int, db *sqlx.DB) (models.Post, err
 	post := models.Post{}
 
 	err := db.Get("SELECT * FROM public.post WHERE id = $1", string(authorId))
+
 	if err != nil {
 		return models.Post{}, err
 	}
@@ -35,6 +36,27 @@ func GetPost(db *sqlx.DB) ([]models.Post, error) {
 	if err != nil {
 		return post, err
 	}
+	return post, nil
+}
+
+func GetPostsByAuthorId(idAuthor string, db *sqlx.DB) ([]models.Post, error) {
+	var post []models.Post
+
+	err := db.Select(&post, "SELECT * FROM public.post WHERE author_id = $1", idAuthor)
+	if err != nil {
+		return []models.Post{}, err
+	}
+	return post, nil
+}
+
+func GetPostByBetweenDate(startDate, endDate time.Time, db *sqlx.DB) ([]models.Post, error) {
+	var post []models.Post
+
+	err := db.Select(&post, "SELECT * FROM public.post WHERE date_created BETWEEN $1 AND $2", startDate, endDate)
+	if err != nil {
+		return []models.Post{}, err
+	}
+
 	return post, nil
 }
 

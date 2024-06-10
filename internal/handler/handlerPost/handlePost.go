@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"post/internal/database/models"
 	"post/internal/services"
+	"time"
 )
 
 func POSTHandlePost(c *gin.Context, db *sqlx.DB) {
@@ -43,6 +44,57 @@ func GETHandlePost(c *gin.Context, db *sqlx.DB) {
 	}
 
 	c.JSON(http.StatusOK, post)
+	return
+}
+
+func GETHandlePostByAuthorId(c *gin.Context, db *sqlx.DB) {
+	if c.Param("idAuthor") == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "idAuthor can't be empty"})
+		return
+	}
+
+	post, err := services.GetPostsByAuthorId(c.Param("idAuthor"), db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
+	return
+}
+
+func GETHandlePostByBetweenDate(c *gin.Context, db *sqlx.DB) {
+	var posts []models.Post
+	var startDate time.Time
+	var endDate time.Time
+
+	if c.Param("startDate") == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "startDate can't be empty"})
+		return
+	}
+	startDate, err := time.Parse(customFormat, c.Param("startDate"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+	if c.Param("endDate") == "" {
+		endDate = time.Now()
+		return
+	} else {
+		endDate, err = time.Parse(customFormat, c.Param("endDate"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+			return
+		}
+	}
+
+	posts, err = services.GetPostByBetweenDate(startDate, endDate, db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, posts)
 	return
 }
 

@@ -1,0 +1,29 @@
+-- Таблица пользователей
+CREATE TABLE public.user (
+    id VARCHAR(32) PRIMARY KEY,
+	login VARCHAR(32) NOT NULL,
+    email VARCHAR(128) UNIQUE NOT NULL,
+    password_hash VARCHAR(256) NOT NULL,
+	data date NOT NULL
+);
+
+-- Таблица постов
+CREATE TABLE public.post (
+    id VARCHAR(32) PRIMARY KEY,
+    title VARCHAR(256) NOT NULL,
+    text VARCHAR(2056),
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    author_id VARCHAR(32) NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES public.user(id)
+);
+
+-- Таблица комментариев
+CREATE TABLE public.comment (
+    id VARCHAR(32) PRIMARY KEY,
+    text VARCHAR(256) NOT NULL,
+    post_id VARCHAR(32) NOT NULL,
+    author_id VARCHAR(32) NOT NULL,
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES public.post(id),
+    FOREIGN KEY (author_id) REFERENCES public.user(id)
+);
