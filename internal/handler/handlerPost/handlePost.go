@@ -96,6 +96,7 @@ func GETHandlePostByBetweenDate(c *gin.Context, db *sqlx.DB) {
 
 	c.JSON(http.StatusOK, posts)
 	return
+
 }
 
 func PUTHandlePost(c *gin.Context, db *sqlx.DB) {
