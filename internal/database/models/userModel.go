@@ -9,7 +9,7 @@ type User struct {
 	Login            string    `db:"login"`
 	Email            string    `db:"email"`
 	PasswordHash     string    `db:"password_hash"`
-	Ip               string    `db:"id_address"`
+	Ip               string    `db:"ip_address"`
 	DateRegistration time.Time `db:"date_registration"`
 }
 
