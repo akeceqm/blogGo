@@ -54,6 +54,6 @@ func PostUser(db *sqlx.DB, email string) (models.User, error) {
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
-
+	
 	return user, nil
 }
