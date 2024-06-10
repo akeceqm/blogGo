@@ -3,11 +3,12 @@ package services
 import (
 	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
-	"golang.org/x/crypto/bcrypt"
 	"post/internal/database/models"
 	"post/internal/middlewares"
 	"time"
+
+	"github.com/jmoiron/sqlx"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetUser(db *sqlx.DB) ([]models.User, error) {
@@ -29,7 +30,6 @@ func GetUserByLogin(db *sqlx.DB, login string) (*models.User, error) {
 		} else {
 			return nil, err
 		}
-		return nil, err
 	}
 	return &user, nil
 }
@@ -54,6 +54,5 @@ func PostUser(db *sqlx.DB, email string) (models.User, error) {
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
-
 	return user, nil
 }

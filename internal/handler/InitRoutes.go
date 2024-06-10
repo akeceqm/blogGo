@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"post/internal/handler/handlerPost"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-	"post/internal/handler/handlerPost"
 
 	"post/internal/handler/handlerUser"
 )

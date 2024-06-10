@@ -1,13 +1,15 @@
 package handlerUser
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
 	"net/http"
 	"post/internal/services"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 func PostHandleRegistrationUser(c *gin.Context, db *sqlx.DB) {
+
 	var emailRequest struct {
 		Email string `json:"email"`
 	}
