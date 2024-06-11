@@ -1,7 +1,10 @@
 package services
 
-import "post/internal/middlewares"
+import (
+	"post/internal/middlewares"
+)
 
 func GeneratePassword() string {
-	return middlewares.GenerateString(passwordLenght, passwordSet)
+	password := middlewares.GenerateString(passwordLenght, passwordSet)
+	return password
 }
