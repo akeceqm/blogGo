@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-func CreatePost(title, text string, authorId int, db *sqlx.DB) (models.Post, error) {
+func CreatePost(title, text string, authorId string, db *sqlx.DB) (models.Post, error) {
 	post := models.Post{}
 
-	err := db.Get("SELECT * FROM public.post WHERE id = $1", string(authorId))
+	err := db.Get("SELECT * FROM public.post WHERE id = $1", authorId)
 
 	if err != nil {
 		return models.Post{}, err

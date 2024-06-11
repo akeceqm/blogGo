@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
-	// Рабоат с юзером
+	// Работа с юзером
 	server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetHandleUsers(c, db)
 	})
@@ -44,6 +45,27 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 
 	server.DELETE("/posts/:id", func(c *gin.Context) {
 		handlerPost.DELETEHandlePost(c, db)
+	})
+
+	// Запросы КОММЕНТАРИЕВ
+	server.GET("/post/:idPost/comments", func(c *gin.Context) {
+		handlerComment.GETHandleCommentsByPostId(c, db)
+	})
+
+	server.GET("/user/:idAuthor/comments/", func(c *gin.Context) {
+		handlerComment.GETHandleCommentsByAuthorId(c, db)
+	})
+
+	server.POST("/post/:idPost/comments", func(c *gin.Context) {
+		handlerComment.POSTHandleCommentByPostId(c, db)
+	})
+
+	server.PUT("/post/:idPost/comments/:idComment", func(c *gin.Context) {
+		handlerComment.PUTHandleCommentById(c, db)
+	})
+
+	server.DELETE("/post/:idPost/comments/:idComment", func(c *gin.Context) {
+		handlerComment.DELETEHandleCommentById(c, db)
 	})
 
 }
