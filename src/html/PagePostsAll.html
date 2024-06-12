@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/src/css/StylePostsAll.css">
+    <title>Все посты</title>
+</head>
+<body>
+<div class="mainPost">
+    {{if .posts}}
+        {{range .posts}}
+            <div class="container">
+                <div class="post">
+                    <div class="header">
+                        <div class="avatar"></div>
+                        <div class="info">
+                            <div class="username">{{ .AuthorName }}</div>
+                            <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                        </div>
+                    </div>
+                    <div class="title">{{ .Title }}</div>
+                    <div class="content">
+                        {{ .Text }}
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="comments">
+                        <a id="commentsClick">
+                            <p>Комментарии: {{ .CommentsCount }}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {{end}}
+        <div class="button">
+            <a id="backButton">Назад</a>
+            <a id="forwardButton">Вперед</a>
+        </div>
+    {{else}}
+            <div class="button">
+                <a id="backButton">Назад</a>
+            </div>
+            <div>
+                Нет постов
+            </div>
+    {{end}}
+</div>
+
+<script src="/src/js/ScriptPostsAll.js"></script>
+</body>
+</html>
