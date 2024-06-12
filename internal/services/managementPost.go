@@ -29,10 +29,31 @@ func CreatePost(title, text string, authorId string, db *sqlx.DB) (models.Post, 
 	return post, nil
 }
 
-func GetPost(db *sqlx.DB) ([]models.Post, error) {
+func GetPosts(db *sqlx.DB) ([]models.Post, error) {
 	post := []models.Post{}
 
 	err := db.Select(&post, "SELECT * FROM public.post")
+	if err != nil {
+		return post, err
+	}
+	return post, nil
+}
+
+func GetPostById(id string, db *sqlx.DB) (models.Post, error) {
+	post := models.Post{}
+
+	err := db.Get(&post, "SELECT * FROM public.post WHERE id = $1", id)
+	if err != nil {
+		return models.Post{}, err
+	}
+
+	return post, nil
+}
+
+func GetPostFull(db *sqlx.DB) ([]models.FullPost, error) {
+	post := []models.FullPost{}
+
+	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id")
 	if err != nil {
 		return post, err
 	}

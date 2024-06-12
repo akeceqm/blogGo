@@ -38,6 +38,26 @@ func GetCommentsByPostId(id string, db *sqlx.DB) ([]models.Comment, error) {
 	return comment, nil
 }
 
+func GetCommentsByPostIdFull(id string, db *sqlx.DB) ([]models.FullComment, error) {
+	var comment []models.FullComment
+
+	err := db.Get(&models.Post{}, "SELECT * FROM public.post WHERE id = $1", id)
+	if err != nil {
+		return []models.FullComment{}, err
+	}
+
+	err = db.Select(&comment, "SELECT public.comment.*, public.user.nick_name FROM public.comment JOIN public.user ON comment.author_id = public.user.id WHERE comment.post_id = $1", id)
+	if err != nil {
+		return []models.FullComment{}, err
+	}
+
+	sort.Slice(comment, func(i, j int) bool {
+		return comment[i].DateCreated.After(comment[j].DateCreated)
+	})
+
+	return comment, nil
+}
+
 func CreateComment(text string, authorId string, postId string, db *sqlx.DB) error {
 	dateCreated := time.Now().Format(dateFormat)
 	_, err := db.Exec("INSERT INTO public.comment (id, text, date_created, author_id, post_id) VALUES ($1, $2, $3, $4, $5)", GenerateId(), text, dateCreated, authorId, postId)

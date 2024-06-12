@@ -21,6 +21,21 @@ func GetUser(db *sqlx.DB) ([]models.User, error) {
 	return users, nil
 }
 
+func GetUserById(id string, db *sqlx.DB) (*models.User, error) {
+	var user models.User
+
+	err := db.Get(&user, `SELECT * FROM public.user WHERE id = $1 `, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("ошибка login или password")
+		} else {
+			return nil, err
+		}
+	}
+
+	return &user, nil
+}
+
 func GetUserByLogin(db *sqlx.DB, login string) (*models.User, error) {
 	var user models.User
 	err := db.Get(&user, `SELECT * FROM public.user WHERE login = $1 `, login)

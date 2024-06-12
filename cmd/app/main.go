@@ -19,6 +19,11 @@ func main() {
 	defer db.Close()
 
 	handler.InitRoutes(cmd.Server, db)
+	handler.InitRoutesHTML(cmd.Server, db)
+
+	cmd.Server.Static("./src", "./src")
+
+	cmd.Server.LoadHTMLGlob("./src/html/*.html")
 
 	err = StartMain(cmd.Server)
 	if err != nil {
