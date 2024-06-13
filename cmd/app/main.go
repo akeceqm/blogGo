@@ -17,8 +17,10 @@ func main() {
 		return
 	}
 	defer db.Close()
-
+	cmd.Server.Static("/assets/", "src/")
+	cmd.Server.LoadHTMLGlob("src/html/*.html")
 	handler.InitRoutes(cmd.Server, db)
+	handler.InitRoutesHTML(cmd.Server, db)
 
 	err = StartMain(cmd.Server)
 	if err != nil {

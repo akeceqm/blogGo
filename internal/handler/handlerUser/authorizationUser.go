@@ -12,6 +12,7 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 		Login    string `json:"login"`
 		Password string `json:"password_hash"`
 	}
+
 	if err := c.BindJSON(&loginRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Ошибка в запросе"})
 		return
@@ -19,14 +20,14 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 
 	dbUser, err := services.GetUserByLogin(db, loginRequest.Login)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "Логин не найден"})
+		if err.Error() == "ошибка: неверный логин или пароль" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "логин не найден"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+		}
 		return
 	}
 
-	if dbUser == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "Пользователь не найден"})
-		return
-	}
 	if err := services.GetUserByCheckPassword(dbUser.PasswordHash, loginRequest.Password); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
