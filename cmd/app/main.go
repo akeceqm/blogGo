@@ -22,6 +22,7 @@ func main() {
 	handler.InitRoutes(cmd.Server, db)
 	handler.InitRoutesHTML(cmd.Server, db)
 
+
 	err = StartMain(cmd.Server)
 	if err != nil {
 		log.Fatalln("Неудачный запуск сервера")

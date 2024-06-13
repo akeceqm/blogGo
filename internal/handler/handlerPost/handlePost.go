@@ -21,7 +21,7 @@ func POSTHandlePost(c *gin.Context, db *sqlx.DB) {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "Title or text can't be empty"})
 		return
 	}
-	if newPost.AuthorId == 0 {
+	if newPost.AuthorId == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "Author can't be empty"})
 		return
 	}
@@ -37,7 +37,7 @@ func POSTHandlePost(c *gin.Context, db *sqlx.DB) {
 }
 
 func GETHandlePost(c *gin.Context, db *sqlx.DB) {
-	post, err := services.GetPost(db)
+	post, err := services.GetPosts(db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return

@@ -14,6 +14,7 @@ type User struct {
 	Ip               sql.NullString `db:"ip_address" json:"ip_address"`
 	DateRegistration time.Time      `db:"date_registration" json:"dateRegistration"`
 	Description      sql.NullString `db:"description" json:"description"`
+
 }
 
 type IPResponse struct {
