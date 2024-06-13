@@ -10,7 +10,7 @@ import (
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	server.GET("/h/:countPage", func(c *gin.Context) {
-		handlerPost.GETHandlePostHTML(c, db)
+		handlerPost.GETHandlePostsHTML(c, db)
 	})
 
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
