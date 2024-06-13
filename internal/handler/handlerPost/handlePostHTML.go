@@ -9,20 +9,27 @@ import (
 	"strconv"
 )
 
-func GETHandlePostHTML(c *gin.Context, db *sqlx.DB) {
+func GETHandlePostsHTML(c *gin.Context, db *sqlx.DB) {
 	post, err := services.GetPostFull(db)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
+
 	PageCount, err := strconv.Atoi(c.Param("countPage"))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
 	var fullPosts []models.FullPost
 	for i := (PageCount - 1) * 10; i < PageCount+10 && i < len(post); i++ {
+		comments, err := services.GetCommentsByPostId(post[i].Id, db)
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+			return
+		}
+
 		fullPosts = append(fullPosts, models.FullPost{
 			Id:                post[i].Id,
 			Title:             post[i].Title,
@@ -31,7 +38,7 @@ func GETHandlePostHTML(c *gin.Context, db *sqlx.DB) {
 			DateCreatedFormat: post[i].DateCreated.Format("2006-01-02 15:04:05"),
 			AuthorName:        post[i].AuthorName,
 			Comments:          []models.FullComment{},
-			CommentsCount:     0,
+			CommentsCount:     len(comments),
 		})
 	}
 

@@ -10,13 +10,13 @@ import (
 
 func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 	if c.Param("idPost") == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "idPost can't be empty"})
+		c.HTML(400, "400.html", gin.H{"Error": "idPost can't be empty"})
 		return
 	}
 
 	comments, err := services.GetCommentsByPostIdFull(c.Param("idPost"), db)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 	for i, _ := range comments {
@@ -27,13 +27,13 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 
 	post, err := services.GetPostById(c.Param("idPost"), db)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
 	user, err := services.GetUserById(post.AuthorId, db)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 

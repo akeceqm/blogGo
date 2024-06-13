@@ -38,23 +38,32 @@
 <div class="probel"></div>
 <div>
     <div class="mainComments">
-        {{ range .posts.Comments }}
-        <div class="comment">
-            <div class="info">
-                <div class="username">{{ .AuthorName }}</div>
-                <div class="timestamp">{{ .DateCreatedFormat }}</div>
-            </div>
-            <div>
-                {{ .Text }}
-            </div>
-        </div>
-        {{end}}
+        {{if .posts.Comments}}
+            {{ range .posts.Comments }}
+                <div class="comment">
+                    <div class="info">
+                        <div class="username">{{ .AuthorName }}</div>
+                        <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                    </div>
+                    <div>
+                        {{ .Text }}
+                    </div>
+                </div>
+            {{end}}
+
+            {{else}}
+                <div class="comment">
+                    <div class="info">
+                        <div class="username">Нет комментариев</div>
+                    </div>
+                </div>
+            {{end}}
     </div>
 
     <div class="mainInput">
         <p class="hidenNickName" id="NickName">1</p>
         <input class="input" id="inputComment" />
-        <button id="btnSendComment">↗️</button>
+        <button id="btnSendComment"></button>
     </div>
 
 </div>
