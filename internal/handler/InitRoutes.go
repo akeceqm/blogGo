@@ -3,10 +3,8 @@ package handler
 import (
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-
 	"post/internal/handler/handlerUser"
 )
 
@@ -15,10 +13,10 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetHandleUsers(c, db)
 	})
-	server.POST("/users/authorization", func(c *gin.Context) {
+	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
 	})
-	server.POST("/users/registration", func(c *gin.Context) {
+	server.POST("/registration", func(c *gin.Context) {
 		handlerUser.PostHandleRegistrationUser(c, db)
 	})
 
