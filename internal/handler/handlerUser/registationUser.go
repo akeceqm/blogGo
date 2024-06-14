@@ -43,5 +43,10 @@ func PostHandleRegistrationUser(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"login": user.Login, "password": user.PasswordHash})
+	// Успешная регистрация, возвращаем данные клиенту в формате JSON
+	c.JSON(http.StatusOK, gin.H{
+		"id":       user.Id,
+		"login":    user.Login,
+		"password": user.PasswordHash,
+	})
 }

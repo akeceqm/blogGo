@@ -2,6 +2,7 @@ package handler
 
 import (
 	"post/internal/handler/handlerPost"
+	"post/internal/handler/session"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
@@ -19,6 +20,15 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	})
 	server.POST("/registration", func(c *gin.Context) {
 		handlerUser.PostHandleRegistrationUser(c, db)
+	})
+
+	server.GET("/api/user/:userId", func(c *gin.Context) {
+		handlerUser.GetHandleUserById(c, db)
+	})
+
+	// cookie
+	server.GET("/session", func(c *gin.Context) {
+		session.CookiesHandler(c.Writer, c.Request)
 	})
 
 	// запросы ПОСТОВ

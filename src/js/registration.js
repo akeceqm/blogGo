@@ -13,16 +13,22 @@ document.addEventListener("DOMContentLoaded", function () {
         email: emailInput.value,
       };
 
-      let xhr = new XMLHttpRequest();
-
-      xhr.open("POST", "/registration", true);
-      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          let response = JSON.parse(xhr.responseText);
-          let login = response.login;
-          let password = response.password;
+      fetch("/registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Неудачная регистрация");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          let login = data.login;
+          let password = data.password;
 
           Swal.fire({
             title: "Успех!",
@@ -30,31 +36,20 @@ document.addEventListener("DOMContentLoaded", function () {
             icon: "success",
             background: "#1e1e1e",
             color: "#fff",
+          }).then(() => {
+            window.location.href = "/profileUser?userId=" + data.id;
           });
-        } else {
-          console.error("Error:", xhr.statusText);
+        })
+        .catch((error) => {
+          console.error("Ошибка:", error);
           Swal.fire({
             icon: "error",
             title: "Ошибка!",
-            text: "Неудачная регистрация",
+            text: error.message || "Неудачная регистрация",
             background: "#1e1e1e",
             color: "#fff",
           });
-        }
-      };
-
-      xhr.onerror = function () {
-        console.error("Request failed");
-        Swal.fire({
-          title: "Интернет?",
-          text: "Проблемы с сервером либо интернетом",
-          icon: "question",
-          background: "#1e1e1e",
-          color: "#fff",
         });
-      };
-
-      xhr.send(JSON.stringify(data));
     });
   }
 });

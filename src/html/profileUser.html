@@ -5,26 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/assets/css/styleProfile.css" rel="stylesheet" />
     <title>Profile</title>
+    <style>
+      #registration-date {
+        color: #f7a600;
+      }
+    </style>
   </head>
   <body>
     <form>
       <div class="main-info">
-        <img
-          class="avatar"
-          src="../img/Default_logo_crypto_dark_theme_exchange_3.jpg"
-          alt="Avatar"
-        />
+        <img class="avatar" alt="Avatar" />
         <div class="text-info">
-          <p class="name-user">Name</p>
-          <p class="date-user">
-            Дата регистрации на сайте: <span>20.20.2020</span>
+          <p id="name-user"></p>
+          <p id="date-user">
+            Дата регистрации на сайте: <span id="registration-date"></span>
           </p>
-          <article class="description-user">Я ебался</article>
+          <article id="description-user"></article>
         </div>
       </div>
       <div class="btn-container">
         <button class="btn-edit" type="button">Изменить данные</button>
       </div>
     </form>
+    <script src="/assets/js/profile.js"></script>
   </body>
 </html>

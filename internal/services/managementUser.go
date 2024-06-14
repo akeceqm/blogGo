@@ -3,6 +3,7 @@ package services
 import (
 	"database/sql"
 	"errors"
+	"github.com/gin-gonic/gin"
 	"log"
 	"post/internal/database/models"
 	"post/internal/middlewares"
@@ -20,6 +21,16 @@ func GetUser(db *sqlx.DB) ([]models.User, error) {
 		return users, err
 	}
 	return users, nil
+}
+
+func GetUserById(db *sqlx.DB, userId string) (*models.User, error) {
+	user := &models.User{}
+	query := `SELECT id, nick_name, date_registration, description FROM public.user WHERE id = $1`
+	err := db.Get(user, query, userId)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func GetUserByLogin(db *sqlx.DB, login string) (*models.User, error) {
@@ -58,4 +69,20 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
 	return user, nil
+}
+
+func GetUserImage(c *gin.Context, db *sqlx.DB) {
+	userId := c.Param("userId")
+
+	var imagePath string
+	query := "SELECT avatar FROM public.user WHERE id = $1"
+	err := db.Get(&imagePath, query, userId)
+	if err != nil || imagePath == "" {
+		// Путь к дефолтному изображению
+		defaultImagePath := "post/src/img/avatar.svg"
+		c.File(defaultImagePath)
+		return
+	}
+
+	c.File(imagePath)
 }
