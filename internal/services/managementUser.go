@@ -68,6 +68,10 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	return user, nil
 }
 
