@@ -3,11 +3,12 @@ package services
 import (
 	"database/sql"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"log"
 	"post/internal/database/models"
 	"post/internal/middlewares"
 	"time"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/crypto/bcrypt"
@@ -68,10 +69,6 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 	return user, nil
 }
 

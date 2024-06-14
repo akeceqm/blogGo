@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/sessions"
-	_ "github.com/lib/pq"
 	"post/cmd"
 	"post/internal/database"
 	"post/internal/handler"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/sessions"
+	_ "github.com/lib/pq"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -30,7 +31,6 @@ func main() {
 	cmd.Server.LoadHTMLGlob("src/html/*.html")
 	handler.InitRoutes(cmd.Server, db)
 	handler.InitRoutesHTML(cmd.Server, db)
-	
 	err = StartMain(cmd.Server)
 	if err != nil {
 		log.Fatalln("Неудачный запуск сервера")
