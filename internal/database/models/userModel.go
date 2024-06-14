@@ -12,9 +12,9 @@ type User struct {
 	Email            string         `db:"email" json:"email"`
 	PasswordHash     string         `db:"password_hash" json:"password_hash"`
 	Ip               sql.NullString `db:"ip_address" json:"ip_address"`
-	DateRegistration time.Time      `db:"date_registration" json:"dateRegistration"`
+	DateRegistration time.Time      `db:"date_registration" json:"date_registration"`
 	Description      sql.NullString `db:"description" json:"description"`
-
+	Avatar           string         `db:"avatar" json:"avatar"`
 }
 
 type IPResponse struct {
