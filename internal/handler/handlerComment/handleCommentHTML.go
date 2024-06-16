@@ -31,7 +31,7 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	user, err := services.GetUserById(post.AuthorId, db)
+	user, err := services.GetUserById(db, post.AuthorId)
 	if err != nil {
 		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return

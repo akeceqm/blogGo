@@ -5,12 +5,10 @@ import (
 	"github.com/jmoiron/sqlx"
 	"post/cmd"
 	"post/internal/handler/handlerComment"
-	"post/internal/handler/handlerPost"
-
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
-  
+
 	cmd.Server.GET("/", handlerIndex)
 	server.GET("/profileUser", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
@@ -26,9 +24,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	})
 }
 
-
 func handlerIndex(c *gin.Context) {
 	c.HTML(200, "index.html", nil)
-	server.GET("/h/:countPage", func(c *gin.Context) {
-		handlerPost.GETHandlePostsHTML(c, db)
-	})
+}
