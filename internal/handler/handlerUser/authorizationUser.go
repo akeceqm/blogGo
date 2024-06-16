@@ -30,7 +30,7 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 	}
 
 	if err := services.GetUserByCheckPassword(dbUser.PasswordHash, loginRequest.Password); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "неверный пароль"})
 		return
 	}
 
@@ -47,23 +47,31 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 		Path:  "/",
 	}
 	http.SetCookie(c.Writer, &cookie)
+
+	// Возвращаем успешный JSON-ответ
+	c.JSON(http.StatusOK, gin.H{"id": dbUser.Id})
 }
+
 func GetHandleUserById(c *gin.Context, db *sqlx.DB) {
 	userId := c.Param("userId")
 
-	// Вызываем сервис для получения данных пользователя из базы данных
 	user, err := services.GetUserById(db, userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
 		return
 	}
+
 	registrationDate := user.DateRegistration.Format("2006-01-02")
-	// Возвращаем данные пользователя в ответе
+	avatar := ""
+	if user.Avatar.Valid {
+		avatar = user.Avatar.String
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"id":                user.Id,
-		"nick_name":         user.Name,
+		"nick_name":         user.NickName,
 		"date_registration": registrationDate,
 		"description":       user.Description.String,
-		"avatar":            user.Avatar,
+		"avatar":            avatar,
 	})
 }

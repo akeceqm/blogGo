@@ -52,7 +52,7 @@ func GetHandleUserById(c *gin.Context, db *sqlx.DB) {
 	// Возвращаем данные пользователя в ответе
 	c.JSON(http.StatusOK, gin.H{
 		"id":                user.Id,
-		"nick_name":         user.Name,
+		"nick_name":         user.NickName,
 		"registration_data": user.DateRegistration,
 		"description":       user.Description,
 		// Добавьте другие поля пользователя по необходимости
