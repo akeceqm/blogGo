@@ -33,6 +33,7 @@
     <div class="posts">
         <div class="posts__inner">
             <div class="mainPost">
+                {{range .posts}}
                 <div class="mainPost__inner">
                     <div class="post">
                         <div class="header">
@@ -42,9 +43,9 @@
                                 <div class="timestamp">{{ .DateCreatedFormat }}</div>
                             </div>
                         </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
+                        <div class="title">{{ .Title }}</div>
                         <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
+                            {{ .Text}}
                         </div>
                     </div>
                     <div class="footer">
@@ -55,50 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mainPost__inner">
-                    <div class="post">
-                        <div class="header">
-                            <div class="avatar"></div>
-                            <div class="info">
-                                <div class="username">{{ .AuthorName }}</div>
-                                <div class="timestamp">{{ .DateCreatedFormat }}</div>
-                            </div>
-                        </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
-                        <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
-                                Комментарии: {{ .CommentsCount }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="mainPost__inner">
-                    <div class="post">
-                        <div class="header">
-                            <div class="avatar"></div>
-                            <div class="info">
-                                <div class="username">{{ .AuthorName }}</div>
-                                <div class="timestamp">{{ .DateCreatedFormat }}</div>
-                            </div>
-                        </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
-                        <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
-                                Комментарии: {{ .CommentsCount }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {{end}}
             </div>
         </div>
 
