@@ -5,6 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"post/cmd"
 	"post/internal/handler/handlerComment"
+	"post/internal/handler/handlerPost"
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
@@ -22,8 +23,12 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)
 	})
+	server.GET("/h/:countPage", func(c *gin.Context) {
+		handlerPost.GETHandlePostsHTML(c, db)
+	})
+
 }
 
 func handlerIndex(c *gin.Context) {
-	c.HTML(200, "index.html", nil)
+	c.HTML(200, "PageMainNoAutorization.html", nil)
 }
