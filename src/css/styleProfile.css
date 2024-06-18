@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1e1e1e;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  color: #fff;
+  overflow-x: hidden;
+  font-size: 20px;
+  padding-top: 20px;
+}
+
+.avatar {
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+}
+
+form {
+  background-color: #2e2e2e;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 80vw;
+  max-width: 1200px;
+}
+
+.main-info {
+  display: flex;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.text-info {
+  margin-top: 2%;
+  margin-left: 20px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.name-user {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.description-user {
+  margin-top: 10px;
+}
+
+.btn-edit {
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #f7a600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: #d68900;
+}
+
+.btn-container {
+  margin-top: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+}

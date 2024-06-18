@@ -1,25 +1,35 @@
 package handler
 
 import (
-	"post/internal/handler/handlerComment"
-	"post/internal/handler/handlerPost"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-
+	"post/internal/handler/handlerComment"
+	"post/internal/handler/handlerPost"
 	"post/internal/handler/handlerUser"
+	"post/internal/handler/session"
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
-	// Работа с юзером
+	// Работа с пользователями
 	server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetHandleUsers(c, db)
 	})
-	server.POST("/users/authorization", func(c *gin.Context) {
+
+	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
 	})
-	server.POST("/users/registration", func(c *gin.Context) {
+
+	server.POST("/registration", func(c *gin.Context) {
 		handlerUser.PostHandleRegistrationUser(c, db)
+	})
+
+	server.GET("/api/user/:userId", func(c *gin.Context) {
+		handlerUser.GetHandleUserById(c, db)
+	})
+
+	// Работа с сессиями (cookies)
+	server.GET("/session", func(c *gin.Context) {
+		session.CookiesHandler(c.Writer, c.Request)
 	})
 
 	// запросы ПОСТОВ

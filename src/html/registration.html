@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/assets/css/styleForm.css" rel="stylesheet" />
+    <title>Registration</title>
+  </head>
+  <body>
+    <style>
+      .error {
+        display: block;
+        color: red;
+        font-size: 14px;
+        margin-top: 2%;
+        margin-left: 2%;
+      }
+    </style>
+    <form id="registrationForm">
+      <div>
+        <h3>Регистрация</h3>
+        <input
+          type="text"
+          name="nick_name"
+          placeholder="Введите имя пользователя"
+          required
+        />
+        <input type="email" name="email" placeholder="Введите почту" required />
+        <button type="submit" id="btn">Зарегистрироваться</button>
+      </div>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/js/registration.js"></script>
+  </body>
+</html>
