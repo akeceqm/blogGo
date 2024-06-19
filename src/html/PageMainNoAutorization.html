@@ -32,9 +32,9 @@
 
     <div class="posts">
         <div class="posts__inner">
-            <div class="mainPost">
+            <div id="MainPosts" class="mainPost">
                 {{range .posts}}
-                <div class="mainPost__inner">
+                <div id="mainPost__inner" class="mainPost__inner">
                     <div class="post">
                         <div class="header">
                             <div class="avatar"></div>
@@ -50,18 +50,25 @@
                     </div>
                     <div class="footer">
                         <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
+                            <a class="commentCount" href="/h/post/{{ .Id }}/comments">
                                 Комментарии: {{ .CommentsCount }}
                             </a>
                         </div>
                     </div>
                 </div>
                 {{end}}
+                <div class="btnLoadPosts" >
+                    <button id="BtnLoadPosts">
+                        Загрузить еще
+                    </button>
+                </div>
             </div>
         </div>
 
     </div>
 </div>
+
+<script src="assets/js/ScriptMainNoAutorization.js"></script>
 
 </body>
 </html>

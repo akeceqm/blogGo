@@ -110,3 +110,27 @@ func DeletePost(id string, db *sqlx.DB) error {
 	}
 	return nil
 }
+
+func GetPostsOrder(number int, db *sqlx.DB) ([]models.FullPost, error) {
+	var posts []models.FullPost
+
+	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id ORDER BY public.post.date_created DESC LIMIT 10 OFFSET $1", (number-1)*10)
+	if err != nil {
+		return []models.FullPost{}, err
+	}
+
+	var FullPosts []models.FullPost
+	for i := 0; i < len(posts); i++ {
+		FullPosts = append(FullPosts, models.FullPost{
+			Id:                posts[i].Id,
+			Title:             posts[i].Title,
+			Text:              posts[i].Text,
+			AuthorId:          posts[i].AuthorId,
+			DateCreatedFormat: posts[i].DateCreated.Format("2006-01-02 15:04:05"),
+			AuthorName:        posts[i].AuthorName,
+			CommentsCount:     posts[i].CommentsCount,
+		})
+	}
+
+	return FullPosts, nil
+}

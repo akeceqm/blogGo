@@ -31,6 +31,10 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 		handlerPost.GETHandlePostsHTML(c, db)
 	})
 
+	server.NoRoute(func(c *gin.Context) {
+		c.HTML(404, "404.html", gin.H{})
+	})
+
 }
 
 func handlerIndex(c *gin.Context, db *sqlx.DB) {

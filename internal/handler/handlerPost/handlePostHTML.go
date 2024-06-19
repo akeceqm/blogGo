@@ -22,6 +22,7 @@ func GETHandlePostsHTML(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
+	//TODO: вынести в ManagementPost
 	var fullPosts []models.FullPost
 	for i := (PageCount - 1) * 10; i < PageCount+10 && i < len(post); i++ {
 		comments, err := services.GetCommentsByPostId(post[i].Id, db)

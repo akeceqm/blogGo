@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"post/internal/database/models"
 	"post/internal/services"
+	"strconv"
 	"time"
 )
 
@@ -125,5 +126,26 @@ func DELETEHandlePost(c *gin.Context, db *sqlx.DB) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"Success": "Post deleted"})
+	return
+}
+
+func GETHandlePostsOrder(c *gin.Context, db *sqlx.DB) {
+	if c.Param("order") == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "order can't be empty"})
+		return
+	}
+	order, err := strconv.Atoi(c.Param("order"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	post, err := services.GetPostsOrder(order, db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
 	return
 }
