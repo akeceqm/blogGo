@@ -78,4 +78,8 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 		handlerComment.DELETEHandleCommentById(c, db)
 	})
 
+	server.GET("/posts/order/:order", func(c *gin.Context) {
+		handlerPost.GETHandlePostsOrder(c, db)
+	})
+
 }

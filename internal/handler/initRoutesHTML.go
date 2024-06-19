@@ -4,13 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"post/cmd"
+	"post/internal/database/models"
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
+	"post/internal/services"
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
-	cmd.Server.GET("/", handlerIndex)
+	cmd.Server.GET("/", func(c *gin.Context) {
+		handlerIndex(c, db)
+	})
 	server.GET("/profileUser", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
@@ -27,8 +31,37 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 		handlerPost.GETHandlePostsHTML(c, db)
 	})
 
+	server.NoRoute(func(c *gin.Context) {
+		c.HTML(404, "404.html", gin.H{})
+	})
+
 }
 
-func handlerIndex(c *gin.Context) {
-	c.HTML(200, "PageMainNoAutorization.html", nil)
+func handlerIndex(c *gin.Context, db *sqlx.DB) {
+	post, err := services.GetPostFull(db)
+	if err != nil {
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+		return
+	}
+
+	var fullPosts []models.FullPost
+	for i := 0; i < 10; i++ {
+		comments, err := services.GetCommentsByPostId(post[i].Id, db)
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+			return
+		}
+
+		fullPosts = append(fullPosts, models.FullPost{
+			Id:                post[i].Id,
+			Title:             post[i].Title,
+			Text:              post[i].Text,
+			AuthorId:          post[i].AuthorId,
+			DateCreatedFormat: post[i].DateCreated.Format("2006-01-02 15:04:05"),
+			AuthorName:        post[i].AuthorName,
+			Comments:          []models.FullComment{},
+			CommentsCount:     len(comments),
+		})
+	}
+	c.HTML(200, "PageMainNoAutorization.html", gin.H{"posts": fullPosts})
 }
