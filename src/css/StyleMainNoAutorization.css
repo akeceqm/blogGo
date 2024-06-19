@@ -1,0 +1,208 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    padding-left: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background-color: #1E1E1E;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #D4D4D4;
+}
+
+.container {
+    max-width: 1220px;
+    padding: 0 10px;
+    margin: 0 auto;
+    display: flex;
+    height: 100vh;
+}
+
+.header {
+    max-width: 180px;
+}
+
+.logo__img{
+    width:100%;
+}
+
+.logo__inner {
+    display: flex;
+    align-items: center;
+
+}
+
+.logo__text {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.menu {
+    display: flex;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.menu__list {
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.menu__item + .menu__item {
+    margin-top: 12px;
+}
+
+.menu__item {
+    border: 1px solid #2a2a2a;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    text-align: center; /* Центрирование текста внутри блока */
+}
+
+.menu__item:hover {
+    border: 1px solid #616161;
+    transition: all .2s;
+}
+
+.menu__link {
+    padding: 10px 25px;
+    font-size: 18px;
+    color: #ffffff; /* Цвет текста */
+    text-decoration: none; /* Убрать подчеркивание */
+    display: block; /* Чтобы элемент занимал всю ширину родителя */
+    width: 100%; /* Занимает всю ширину родителя для центрирования */
+    text-align: center; /* Центрирование текста */
+    cursor: pointer;
+}
+
+.posts {
+    margin-left: 20%;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-color: transparent transparent;
+}
+.posts::-webkit-scrollbar {
+    display: none;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10% 10% 0 0;
+}
+
+.button a {
+    background-color: #f7a600;
+    padding: 20px 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 10%;
+    margin-top: 10%;
+}
+
+.mainPost__inner {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    background-color: #292a2b;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.post {
+    background-color: #17181e;
+    border-radius: 20px;
+    padding: 20px;
+    width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #555;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: bold;
+    color: #d5d1d1;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.title {
+    margin-bottom: 5%;
+    color: #f7a600;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.content {
+    margin-bottom: 0%;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #333537;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    background-color: #292a2b;
+    border-radius: 20px;
+}
+
+.mainPost {
+    display: block;
+    overflow-y: scroll;
+}
