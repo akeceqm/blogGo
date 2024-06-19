@@ -17,14 +17,17 @@ li {
 a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 body {
-    background-color: #1E1E1E;
+    background-color: #1e1e1e;
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     font-size: 14px;
     color: #D4D4D4;
+    overflow-y: hidden;
+    padding: 10px;
 }
 
 .container {
@@ -212,8 +215,9 @@ button {
 }
 
 .btnLoadPosts {
+    text-align: center;
     background-color: #f7a600;
-    padding: 20px 40px;
+    padding: 10px 20px;
     border-radius: 10px;
     text-decoration: none;
     color: #fff;
@@ -221,4 +225,9 @@ button {
     margin-bottom: 10%;
     margin-top: 10%;
     cursor: pointer;
+}
+
+.btnLoadPosts:hover {
+    background-color: #c08200;
+    transition: all .2s;
 }

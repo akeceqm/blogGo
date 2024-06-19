@@ -45,7 +45,7 @@ func handlerIndex(c *gin.Context, db *sqlx.DB) {
 	}
 
 	var fullPosts []models.FullPost
-	for i := 0; i < len(post); i++ {
+	for i := 0; i < 10; i++ {
 		comments, err := services.GetCommentsByPostId(post[i].Id, db)
 		if err != nil {
 			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
