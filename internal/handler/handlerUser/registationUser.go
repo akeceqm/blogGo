@@ -43,6 +43,25 @@ func PostHandleRegistrationUser(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
+	sessionID, err := middlewares.GenerateSessionID()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+		return
+	}
+
+	err = services.CreateSession(db, sessionID, user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "не удалось создать сессию"})
+		return
+	}
+
+	cookie := http.Cookie{
+		Name:  "session_id",
+		Value: sessionID,
+		Path:  "/",
+	}
+	http.SetCookie(c.Writer, &cookie)
+
 	// Успешная регистрация, возвращаем данные клиенту в формате JSON
 	c.JSON(http.StatusOK, gin.H{
 		"id":       user.Id,

@@ -1,4 +1,9 @@
 /* styles.css */
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
 body {
     background-color: #1e1e1e;
     display: flex;

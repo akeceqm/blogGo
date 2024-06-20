@@ -9,11 +9,8 @@ import (
 	"post/internal/handler"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 )
-
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
 
 func main() {
 	cmd.Server = gin.Default()
