@@ -8,8 +8,6 @@ import (
 	"post/internal/middlewares"
 	"time"
 
-	"github.com/gin-gonic/gin"
-
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -59,29 +57,24 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 
 	user.Id = GenerateId()
 	user.Login = GenerateLogin()
-	user.NickName = name
+	user.NickName.String = name
 	user.Email = email
 	user.PasswordHash = GeneratePassword()
 	user.DateRegistration = time.Now()
-	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
+	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName.String, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
 	return user, nil
 }
 
-func GetUserImage(c *gin.Context, db *sqlx.DB) {
-	userId := c.Param("userId")
+func PutUserData(db *sqlx.DB, userId, name, description, avatar string) (*models.User, error) {
+	var user models.User
 
-	var imagePath string
-	query := `SELECT avatar FROM public.user WHERE id = $1`
-	err := db.Get(&imagePath, query, userId)
-	if err != nil || imagePath == "" {
-		// Путь к дефолтному изображению
-		defaultImagePath := "post/src/img/avatar.svg"
-		c.File(defaultImagePath)
-		return
+	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, name, description, avatar, userId)
+	if err != nil {
+		return nil, err
 	}
 
-	c.File(imagePath)
+	return &user, nil
 }

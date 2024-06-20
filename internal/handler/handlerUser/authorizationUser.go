@@ -40,7 +40,11 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	// Устанавливаем куку с идентификатором сессии
+	if err := services.CreateSession(db, sessionID, dbUser.Id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "не удалось создать сессию"})
+		return
+	}
+
 	cookie := http.Cookie{
 		Name:  "session_id",
 		Value: sessionID,
@@ -48,7 +52,6 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 	}
 	http.SetCookie(c.Writer, &cookie)
 
-	// Возвращаем успешный JSON-ответ
 	c.JSON(http.StatusOK, gin.H{"id": dbUser.Id})
 }
 

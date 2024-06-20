@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	Id               string         `db:"id" json:"id"`
-	NickName         string         `db:"nick_name" json:"nick_name"`
+	NickName         sql.NullString `db:"nick_name" json:"nick_name"`
 	Login            string         `db:"login" json:"login"`
 	Email            string         `db:"email" json:"email"`
 	PasswordHash     string         `db:"password_hash" json:"password_hash"`

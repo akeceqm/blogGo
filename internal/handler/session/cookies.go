@@ -1,11 +1,8 @@
 package session
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
 	"net/http"
 	"post/internal/middlewares"
-	"post/internal/services"
 )
 
 func CookiesHandler(w http.ResponseWriter, r *http.Request) {
@@ -37,24 +34,4 @@ func CookiesHandler(w http.ResponseWriter, r *http.Request) {
 	// Если куки уже существуют, можно просто отправить ответ о том, что все в порядке
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Сессионные куки уже установлены"))
-}
-
-func GetHandleUserById(c *gin.Context, db *sqlx.DB) {
-	userId := c.Param("userId")
-
-	// Вызываем сервис для получения данных пользователя из базы данных
-	user, err := services.GetUserById(db, userId)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
-		return
-	}
-
-	// Возвращаем данные пользователя в ответе
-	c.JSON(http.StatusOK, gin.H{
-		"id":                user.Id,
-		"nick_name":         user.NickName,
-		"registration_data": user.DateRegistration,
-		"description":       user.Description,
-		// Добавьте другие поля пользователя по необходимости
-	})
 }
