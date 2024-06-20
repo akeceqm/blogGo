@@ -28,6 +28,7 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	cmd.Server.GET("/", func(c *gin.Context) {
 		handlerIndex(db, c)
+
 	})
 
 	server.GET("/profileUser", func(c *gin.Context) {
