@@ -6,6 +6,7 @@ import (
 	"log"
 	"post/cmd"
 	"post/internal/database/models"
+
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
 	"post/internal/services"
@@ -16,21 +17,21 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	server.GET("/authorization", func(c *gin.Context) {
 		c.HTML(200, "authorization.html", gin.H{})
-  })
-    
-    server.GET("/registration", func(c *gin.Context) {
+	})
+
+	server.GET("/registration", func(c *gin.Context) {
 		c.HTML(200, "registration.html", gin.H{})
 	})
-    // Применяем middleware авторизации
+	// Применяем middleware авторизации
 	server.Use(authMiddleware)
 
 	cmd.Server.GET("/", func(c *gin.Context) {
-		handlerIndex(c, db)
+		handlerIndex(db, c)
 	})
 	server.GET("/profileUser", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
-  
+
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
@@ -43,13 +44,17 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/h/:countPage", func(c *gin.Context) {
 		handlerPost.GETHandlePostsHTML(c, db)
 	})
+
+	server.NoRoute(func(c *gin.Context) {
+		c.HTML(404, "404.html", gin.H{})
+	})
 }
 
 func handlerIndex(db *sqlx.DB, c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists || userID == nil {
 		log.Println("Пользователь не авторизован или сессия истекла")
-		handlerIndexNoAuthorization(c)
+		handlerIndexNoAuthorization(c, db)
 		return
 	}
 
@@ -57,55 +62,19 @@ func handlerIndex(db *sqlx.DB, c *gin.Context) {
 	isAuthorized, err := services.IsUserAuthorized(db, userID.(string))
 	if err != nil {
 		log.Println("Ошибка проверки авторизации:", err)
-		handlerIndexNoAuthorization(c)
+		handlerIndexNoAuthorization(c, db)
 		return
 	}
 
 	if isAuthorized {
 		handlerIndexAuthorization(c)
 	} else {
-		handlerIndexNoAuthorization(c)
+		handlerIndexNoAuthorization(c, db)
 	}
 }
 
-func handlerIndexNoAuthorization(c *gin.Context) {
+func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 	log.Println("Rendering PageMainNoAuthorization.html")
-	c.HTML(200, "PageMainNoAuthorization.html", nil)
-}
-
-func handlerIndexAuthorization(c *gin.Context) {
-	log.Println("Rendering PagePostComments.html")
-	c.HTML(200, "PagePostComments.html", nil)
-}
-
-func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		sessionID, err := c.Cookie("session_id")
-		if err != nil || sessionID == "" {
-			handlerIndexNoAuthorization(c)
-			c.Abort()
-			return
-		}
-
-		session, err := services.GetSessionByID(db, sessionID)
-		if err != nil || session.UserID == "" {
-			handlerIndexNoAuthorization(c)
-			c.Abort()
-			return
-		}
-
-		c.Set("userID", session.UserID) // Установка userID в контекст Gin для авторизованных пользователей
-		c.Next()
-	}
-}
-  
-	server.NoRoute(func(c *gin.Context) {
-		c.HTML(404, "404.html", gin.H{})
-	})
-
-}
-
-func handlerIndex(c *gin.Context, db *sqlx.DB) {
 	post, err := services.GetPostFull(db)
 	if err != nil {
 		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
@@ -131,5 +100,31 @@ func handlerIndex(c *gin.Context, db *sqlx.DB) {
 			CommentsCount:     len(comments),
 		})
 	}
-	c.HTML(200, "PageMainNoAutorization.html", gin.H{"posts": fullPosts})
+	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
+}
+
+func handlerIndexAuthorization(c *gin.Context) {
+	log.Println("Rendering PagePostComments.html")
+	c.HTML(200, "PageMainYesAuthorization.html", nil)
+}
+
+func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		sessionID, err := c.Cookie("session_id")
+		if err != nil || sessionID == "" {
+			handlerIndexNoAuthorization(c, db)
+			c.Abort()
+			return
+		}
+
+		session, err := services.GetSessionByID(db, sessionID)
+		if err != nil || session.UserID == "" {
+			handlerIndexNoAuthorization(c, db)
+			c.Abort()
+			return
+		}
+
+		c.Set("userID", session.UserID) // Установка userID в контекст Gin для авторизованных пользователей
+		c.Next()
+	}
 }
