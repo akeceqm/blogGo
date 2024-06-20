@@ -4,12 +4,13 @@ import (
 	"log"
 	"post/cmd"
 	"post/internal/database/models"
-	"post/internal/handler/handlerComment"
-	"post/internal/handler/handlerPost"
-	"post/internal/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+
+	"post/internal/handler/handlerComment"
+	"post/internal/handler/handlerPost"
+	"post/internal/services"
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
@@ -17,16 +18,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	server.GET("/authorization", func(c *gin.Context) {
 		c.HTML(200, "authorization.html", gin.H{})
-
-	})
-	server.GET("/registration", func(c *gin.Context) {
-		c.HTML(200, "registration.html", gin.H{})
-	})
-	// Применяем middleware авторизации
-	server.Use(authMiddleware)
-
-	cmd.Server.GET("/", func(c *gin.Context) {
-		handlerIndex(db, c)
 	})
 
 	server.GET("/registration", func(c *gin.Context) {
@@ -37,11 +28,12 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	cmd.Server.GET("/", func(c *gin.Context) {
 		handlerIndex(db, c)
-
 	})
+
 	server.GET("/profileUser", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
+
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
@@ -58,10 +50,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.NoRoute(func(c *gin.Context) {
 		c.HTML(404, "404.html", gin.H{})
 	})
-	server.NoRoute(func(c *gin.Context) {
-		c.HTML(404, "404.html", gin.H{})
-	})
-
 }
 
 func handlerIndex(db *sqlx.DB, c *gin.Context) {
@@ -95,8 +83,14 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
+	if len(post) == 0 {
+		log.Println("No posts found")
+		c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": []models.FullPost{}})
+		return
+	}
+
 	var fullPosts []models.FullPost
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 10 && i < len(post); i++ {
 		comments, err := services.GetCommentsByPostId(post[i].Id, db)
 		if err != nil {
 			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
@@ -114,12 +108,12 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 			CommentsCount:     len(comments),
 		})
 	}
-	c.HTML(200, "PageMainNoAutorization.html", gin.H{"posts": fullPosts})
+	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
 }
 
 func handlerIndexAuthorization(c *gin.Context) {
 	log.Println("Rendering PagePostComments.html")
-	c.HTML(200, "PagePostComments.html", nil)
+	c.HTML(200, "PageMainYesAuthorization.html", nil)
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
