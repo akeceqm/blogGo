@@ -30,7 +30,7 @@ type FullPost struct {
 	AuthorName        string `db:"nick_name" json:"nick_name"`
 	AuthorId          string `db:"author_id" json:"author_id"`
 	Comments          []FullComment
-	CommentsCount     int
+	CommentsCount     int `db:"comment_count" json:"comment_count"`
 }
 
 type FullComment struct {

@@ -57,7 +57,7 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 
 	user.Id = GenerateId()
 	user.Login = GenerateLogin()
-	user.NickName = name
+	user.NickName.String = name
 	user.Email = email
 	user.PasswordHash = GeneratePassword()
 	user.DateRegistration = time.Now()

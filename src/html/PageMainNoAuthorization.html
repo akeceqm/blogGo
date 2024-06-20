@@ -24,9 +24,6 @@
                         <li class="menu__item">
                             <a href="/authorization" class="menu__link">Вход</a>
                         </li>
-                        <li class="menu__item">
-                            <a href="/profile" class="menu__link">Мой профиль</a>
-                        </li>
                     </ul>
                 </nav>
             </div>
@@ -35,8 +32,9 @@
 
     <div class="posts">
         <div class="posts__inner">
-            <div class="mainPost">
-                <div class="mainPost__inner">
+            <div id="MainPosts" class="mainPost">
+                {{range .posts}}
+                <div id="mainPost__inner" class="mainPost__inner">
                     <div class="post">
                         <div class="header">
                             <div class="avatar"></div>
@@ -45,67 +43,32 @@
                                 <div class="timestamp">{{ .DateCreatedFormat }}</div>
                             </div>
                         </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
+                        <div class="title">{{ .Title }}</div>
                         <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
+                            {{ .Text}}
                         </div>
                     </div>
                     <div class="footer">
                         <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
+                            <a class="commentCount" href="/h/post/{{ .Id }}/comments">
                                 Комментарии: {{ .CommentsCount }}
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="mainPost__inner">
-                    <div class="post">
-                        <div class="header">
-                            <div class="avatar"></div>
-                            <div class="info">
-                                <div class="username">{{ .AuthorName }}</div>
-                                <div class="timestamp">{{ .DateCreatedFormat }}</div>
-                            </div>
-                        </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
-                        <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
-                                Комментарии: {{ .CommentsCount }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="mainPost__inner">
-                    <div class="post">
-                        <div class="header">
-                            <div class="avatar"></div>
-                            <div class="info">
-                                <div class="username">{{ .AuthorName }}</div>
-                                <div class="timestamp">{{ .DateCreatedFormat }}</div>
-                            </div>
-                        </div>
-                        <div class="title"> dgsf hfgh fghg hfg hfdgh gh gh gfdhgf hgf hghg jgj ghghgh ghj h</div>
-                        <div class="content">
-                            ghjghfjgfh jghfj ghjghjhgj gjgh jhj hgj hgjf gjjjjjjjjjjjjjjjjjjjjjjghj jhj j hjf fgj jhjgfh j fghjhgj ghjfg jghfjgh fjfgh jhgj ghj hgj gfhjghf jghjfgj fghj ghfj hgjfghjhgfj
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <div class="comments">
-                            <a href="/h/post/{{ .Id }}/comments">
-                                Комментарии: {{ .CommentsCount }}
-                            </a>
-                        </div>
-                    </div>
+                {{end}}
+                <div id="Main__BtnLoadPosts" class="btnLoadPosts" >
+                    <button id="BtnLoadPosts">
+                        <a style="font-size: 20px">Загрузить еще</a>
+                    </button>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-<script src="/assets/js/session.js"></script>
+
+<script src="assets/js/ScriptMainNoAutorization.js"></script>
+
 </body>
 </html>

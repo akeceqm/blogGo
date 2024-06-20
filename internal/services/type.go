@@ -3,7 +3,7 @@ package services
 var (
 	idSet          string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	idLenght       int    = 32
-	passwordSet    string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!!!!!@@@@@@@@%%%%%%%&&&&&&&&&^^^^^^^^^^^^????????"
+	passwordSet    string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!!!!!@@@@@%%%%&&&&&^^^^^^^^????"
 	passwordLenght int    = 20
 	loginSet       string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	loginLenght    int    = 20
