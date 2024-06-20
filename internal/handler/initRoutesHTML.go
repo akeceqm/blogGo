@@ -1,15 +1,15 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
 	"log"
 	"post/cmd"
 	"post/internal/database/models"
-
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
 	"post/internal/services"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
@@ -17,8 +17,8 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	server.GET("/authorization", func(c *gin.Context) {
 		c.HTML(200, "authorization.html", gin.H{})
-	})
 
+	})
 	server.GET("/registration", func(c *gin.Context) {
 		c.HTML(200, "registration.html", gin.H{})
 	})
@@ -28,10 +28,20 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	cmd.Server.GET("/", func(c *gin.Context) {
 		handlerIndex(db, c)
 	})
+
+	server.GET("/registration", func(c *gin.Context) {
+		c.HTML(200, "registration.html", gin.H{})
+	})
+	// Применяем middleware авторизации
+	server.Use(authMiddleware)
+
+	cmd.Server.GET("/", func(c *gin.Context) {
+		handlerIndex(c, db)
+
+	})
 	server.GET("/profileUser", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
-
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
@@ -48,6 +58,10 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.NoRoute(func(c *gin.Context) {
 		c.HTML(404, "404.html", gin.H{})
 	})
+	server.NoRoute(func(c *gin.Context) {
+		c.HTML(404, "404.html", gin.H{})
+	})
+
 }
 
 func handlerIndex(db *sqlx.DB, c *gin.Context) {
