@@ -67,3 +67,14 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 	}
 	return user, nil
 }
+
+func PutUserData(db *sqlx.DB, userId, name, description, avatar string) (*models.User, error) {
+	var user models.User
+
+	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, name, description, avatar, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}

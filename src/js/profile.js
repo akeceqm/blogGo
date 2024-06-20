@@ -36,5 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => {
         console.error("Ошибка загрузки данных о пользователе", error);
       });
+    const btnEdit = document.querySelector(".btn-edit");
+    btnEdit.addEventListener("click", function () {
+      window.location.href = `/changeProfile?userId=`+data.id;
+    });
   }
 });

@@ -8,7 +8,6 @@ import (
 	"post/internal/handler/handlerPost"
 	"post/internal/handler/handlerUser"
 	"post/internal/handler/session"
-	"post/internal/services"
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
@@ -30,7 +29,7 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	})
 
 	auth := server.Group("/profile")
-	auth.Use(services.AuthMiddleware(db))
+	auth.Use(AuthMiddleware(db))
 	{
 		auth.GET("/", func(c *gin.Context) {
 			userID, _ := c.Get("userID")

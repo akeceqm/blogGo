@@ -1,9 +1,7 @@
 package services
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-	"net/http"
 	"post/internal/database/models"
 	"time"
 )
@@ -27,23 +25,33 @@ func GetSessionByID(db *sqlx.DB, sessionID string) (*models.Session, error) {
 	}
 	return &session, nil
 }
-func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		cookie, err := c.Cookie("session_id")
-		if err != nil || cookie == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "необходимо авторизоваться"})
-			c.Abort()
-			return
-		}
 
-		session, err := GetSessionByID(db, cookie)
-		if err != nil || session.UserID == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "необходимо авторизоваться"})
-			c.Abort()
-			return
-		}
+//func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
+//	return func(c *gin.Context) {
+//		cookie, err := c.Cookie("session_id")
+//		if err != nil || cookie == "" {
+//			c.Redirect(http.StatusFound, "/authorization") // Redirect to login if session cookie not found
+//			c.Abort()
+//			return
+//		}
+//
+//		session, err := GetSessionByID(db, cookie)
+//		if err != nil || session.UserID == "" {
+//			c.Redirect(http.StatusFound, "/authorization") // Redirect to login if session invalid
+//			c.Abort()
+//			return
+//		}
+//
+//		c.Set("userID", session.UserID)
+//		c.Next()
+//	}
+//}
 
-		c.Set("userID", session.UserID)
-		c.Next()
+func IsUserAuthorized(db *sqlx.DB, userID string) (bool, error) {
+	var user models.User
+	err := db.Get(&user, "SELECT * FROM public.user WHERE id = $1", userID)
+	if err != nil {
+		return false, err
 	}
+	return true, nil // Предполагаем, что пользователь авторизован, если найден в базе данных
 }
