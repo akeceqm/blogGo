@@ -28,16 +28,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	cmd.Server.GET("/", func(c *gin.Context) {
 		handlerIndex(db, c)
-	})
-
-	server.GET("/registration", func(c *gin.Context) {
-		c.HTML(200, "registration.html", gin.H{})
-	})
-	// Применяем middleware авторизации
-	server.Use(authMiddleware)
-
-	cmd.Server.GET("/", func(c *gin.Context) {
-		handlerIndex(db, c)
 
 	})
 
@@ -94,8 +84,14 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
+	if len(post) == 0 {
+		log.Println("No posts found")
+		c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": []models.FullPost{}})
+		return
+	}
+
 	var fullPosts []models.FullPost
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 10 && i < len(post); i++ {
 		comments, err := services.GetCommentsByPostId(post[i].Id, db)
 		if err != nil {
 			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
