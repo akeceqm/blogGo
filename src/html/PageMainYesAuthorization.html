@@ -14,7 +14,7 @@
                     <a class="logo" href="#">
                         <img class="logo__img" src="assets/img/logo.svg" alt="logo" />
                     </a>
-                    <h4 class="logo__text">NickName</h4>
+                    <h4 class="logo__text">{{ .user.NickName.String }}</h4>
                 </div>
                 <nav class="menu">
                     <ul class="menu__list">
@@ -32,11 +32,12 @@
             </div>
         </div>
     </header>
+
     <div class="posts">
         <div class="posts__inner">
-            <div class="mainPost">
+            <div id="MainPosts" class="mainPost">
                 {{range .posts}}
-                    <div class="mainPost__inner">
+                    <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
                             <div class="header">
                                 <div class="avatar"></div>
@@ -52,7 +53,7 @@
                         </div>
                         <div class="footer">
                             <div class="comments">
-                                <a href="/h/post/{{ .Id }}/comments">
+                                <a class="commentCount" href="/h/post/{{ .Id }}/comments">
                                     Комментарии: {{ .CommentsCount }}
                                 </a>
                             </div>
@@ -71,5 +72,6 @@
 </div>
 
 <script src="assets/js/ScriptMainYesAuthorization.js"></script>
+
 </body>
 </html>
