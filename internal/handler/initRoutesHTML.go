@@ -149,32 +149,27 @@ func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 	userID, exists := c.Get("userID")
 	if !exists || userID == nil {
 		log.Println("Пользователь не авторизован или сессия истекла fgdfg")
-		handlerIndexNoAuthorization(c, db)
-		return
+		userID = ""
 	}
 
-	User, err := services.GetUserById(db, userID.(string))
+	userName, err := services.GetUserById(db, userID.(string))
 	if err != nil {
 		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
-	c.HTML(200, "PageMainYesAuthorization.html", gin.H{"posts": fullPosts, "user": User})
+	c.HTML(200, "PageMainYesAuthorization.html", gin.H{"posts": fullPosts, "userName": userName})
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sessionID, err := c.Cookie("session_id")
 		if err != nil || sessionID == "" {
-			handlerIndexNoAuthorization(c, db)
-			c.Abort()
 			return
 		}
 
 		session, err := services.GetSessionByID(db, sessionID)
 		if err != nil || session.UserID == "" {
-			handlerIndexNoAuthorization(c, db)
-			c.Abort()
 			return
 		}
 

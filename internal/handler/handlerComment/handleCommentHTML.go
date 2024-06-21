@@ -56,6 +56,18 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 		userID = ""
 	}
 
-	c.HTML(http.StatusOK, "PagePostComments.html", gin.H{"posts": fullPostAndComments, "userID": userID})
+	var userName string
+	if userID != "" {
+		user, err = services.GetUserById(db, userID.(string))
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+			return
+		}
+		userName = user.NickName.String
+	} else {
+		userName = "Авторизуйтесь чтобы комментировать"
+	}
+
+	c.HTML(http.StatusOK, "PagePostComments.html", gin.H{"posts": fullPostAndComments, "userID": userID, "userName": userName})
 	return
 }

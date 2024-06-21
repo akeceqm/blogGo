@@ -1,3 +1,10 @@
+const author_id = document.getElementById("NickName");
+const input = document.getElementById("inputComment");
+if (author_id.title == "") {
+    input.disabled = true;
+    console.log("Не авторизован");
+}
+
 let button = document.getElementById("btnSendComment");
 if (button) {
     // Функция, которая отправляет комментарий
@@ -18,17 +25,17 @@ if (button) {
             console.log(
                 JSON.stringify({
                     text: input.value,
-                    author_id: author_id.textContent,
+                    author_id: author_id.title,
                 })
             );
 
-            //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(
                 JSON.stringify({
                     text: input.value,
-                    author_id: author_id.textContent,
+                    author_id: author_id.title,
                 })
             );
+
             location.reload();
         }
     }
@@ -37,7 +44,7 @@ if (button) {
     button.onclick = sendComment;
 
     // Привязываем функцию к полю ввода для события keydown
-    let input = document.getElementById("inputComment");
+    const input = document.getElementById("inputComment");
     if (input) {
         input.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
