@@ -15,7 +15,7 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 	}
 
 	if err := c.BindJSON(&loginRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Ошибка в запросе"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
@@ -24,7 +24,7 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 		if err.Error() == "ошибка: неверный логин или пароль" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "логин не найден"})
 		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		}
 		return
 	}
@@ -36,12 +36,12 @@ func PostHandleAuthorizationUser(c *gin.Context, db *sqlx.DB) {
 
 	sessionID, err := middlewares.GenerateSessionID()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
 	if err := services.CreateSession(db, sessionID, dbUser.Id); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "не удалось создать сессию"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
@@ -60,7 +60,7 @@ func GetHandleUserById(c *gin.Context, db *sqlx.DB) {
 
 	user, err := services.GetUserById(db, userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 

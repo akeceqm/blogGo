@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/assets/css/StyleMainYesAutorization.css">
+    <link rel="stylesheet" href="assets/css/styleMenu.css">
     <title>SeverGoBlog</title>
 </head>
 <body>
@@ -14,12 +15,12 @@
                     <a class="logo" href="#">
                         <img class="logo__img" src="/assets/img/logo.svg" alt="logo" />
                     </a>
-                    <h4 class="logo__text">{{ .userName.NickName.String }}</h4>
+                    <h4 class="logo__text"><a href="/profile">{{ .userName.NickName.String }}</a></h4>
                 </div>
                 <nav class="menu">
                     <ul class="menu__list">
                         <li class="menu__item">
-                            <a href="#" class="menu__link">Лента</a>
+                            <a href="/" class="menu__link">Лента</a>
                         </li>
                         <li class="menu__item">
                             <a href="#" class="menu__link">Месседжер</a>

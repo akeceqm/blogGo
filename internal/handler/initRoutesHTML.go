@@ -56,7 +56,7 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 func handlerIndex(db *sqlx.DB, c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists || userID == nil {
-		log.Println("Пользователь не авторизован или сессия истекла")
+		c.HTML(400, "400.html", gin.H{"Error": "Пользователь не авторизован или сессия истекла"})
 		handlerIndexNoAuthorization(c, db)
 		return
 	}
