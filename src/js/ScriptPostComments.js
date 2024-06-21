@@ -1,3 +1,10 @@
+const author_id = document.getElementById("NickName");
+const input = document.getElementById("inputComment");
+if (author_id.title === "") {
+    input.disabled = true;
+    console.log("Не авторизован");
+}
+
 let button = document.getElementById("btnSendComment");
 if (button) {
     // Функция, которая отправляет комментарий
@@ -8,36 +15,46 @@ if (button) {
         const pathSegments = url.pathname.split("/");
         const post_id = pathSegments[pathSegments.length - 2];
 
-        if (input) {
+        console.log("xxx")
+        if (input && input.value) {
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `http://localhost:8080/post/${post_id}/comments`);
-            xhr.onload = function (e) {
-                console.log(e);
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    let response = JSON.parse(xhr.responseText);
+                    // Обработайте ответ, например, добавьте комментарий на страницу
+                    console.log(response);
+
+                    location.reload();
+                } else {
+                    // Ошибка на стороне сервера
+                    console.error("Server error:", xhr.status, xhr.statusText);
+                    location.reload();
+                }
             };
 
-            console.log(
-                JSON.stringify({
-                    text: input.value,
-                    author_id: author_id.textContent,
-                })
-            );
+            xhr.onerror = function () {
+                // Ошибка сети
+                console.error("Network error");
+            };
 
-            //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.send(
-                JSON.stringify({
-                    text: input.value,
-                    author_id: author_id.textContent,
-                })
-            );
-            location.reload();
+            let commentData = JSON.stringify({
+                text: input.value,
+                author_id: author_id.title,
+            });
+
+            console.log(commentData);
+
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(commentData);
+            input.value = "";
         }
     }
 
-    // Привязываем функцию к кнопке
     button.onclick = sendComment;
 
-    // Привязываем функцию к полю ввода для события keydown
-    let input = document.getElementById("inputComment");
+    const input = document.getElementById("inputComment");
     if (input) {
         input.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/css/StyleMainYesAutorization.css">
+    <link rel="stylesheet" href="/assets/css/StyleMainYesAutorization.css">
     <link rel="stylesheet" href="assets/css/styleMenu.css">
     <title>SeverGoBlog</title>
 </head>
@@ -13,9 +13,9 @@
             <div class="header__inner">
                 <div class="logo__inner">
                     <a class="logo" href="#">
-                        <img class="logo__img" src="assets/img/logo.svg" alt="logo" />
+                        <img class="logo__img" src="/assets/img/logo.svg" alt="logo" />
                     </a>
-                    <h4 class="logo__text"><a href="/profile">NickName</a></h4>
+                    <h4 class="logo__text"><a href="/profile">{{ .userName.NickName.String }}</a></h4>
                 </div>
                 <nav class="menu">
                     <ul class="menu__list">
@@ -33,11 +33,12 @@
             </div>
         </div>
     </header>
+
     <div class="posts">
         <div class="posts__inner">
-            <div class="mainPost">
+            <div id="MainPosts" class="mainPost">
                 {{range .posts}}
-                    <div class="mainPost__inner">
+                    <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
                             <div class="header">
                                 <div class="avatar"></div>
@@ -53,18 +54,25 @@
                         </div>
                         <div class="footer">
                             <div class="comments">
-                                <a href="/h/post/{{ .Id }}/comments">
+                                <a class="commentCount" href="/h/post/{{ .Id }}/comments">
                                     Комментарии: {{ .CommentsCount }}
                                 </a>
                             </div>
                         </div>
                     </div>
                 {{end}}
+                <div id="Main__BtnLoadPosts" class="btnLoadPosts" >
+                    <button id="BtnLoadPosts">
+                        <a style="font-size: 20px">Загрузить еще</a>
+                    </button>
+                </div>
             </div>
         </div>
 
     </div>
 </div>
+
+<script src="/assets/js/ScriptMainYesAuthorization.js"></script>
 
 </body>
 </html>
