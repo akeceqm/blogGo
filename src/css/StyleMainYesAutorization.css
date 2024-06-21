@@ -54,45 +54,6 @@ body {
     font-size: 18px;
 }
 
-.menu {
-    display: flex;
-    margin-top: 15px;
-    justify-content: center;
-}
-
-.menu__list {
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-}
-
-.menu__item + .menu__item {
-    margin-top: 12px;
-}
-
-.menu__item {
-    border: 1px solid #2a2a2a;
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    text-align: center; /* Центрирование текста внутри блока */
-}
-
-.menu__item:hover {
-    border: 1px solid #616161;
-    transition: all .2s;
-}
-
-.menu__link {
-    padding: 10px 25px;
-    font-size: 18px;
-    color: #ffffff; /* Цвет текста */
-    text-decoration: none; /* Убрать подчеркивание */
-    display: block; /* Чтобы элемент занимал всю ширину родителя */
-    width: 100%; /* Занимает всю ширину родителя для центрирования */
-    text-align: center; /* Центрирование текста */
-    cursor: pointer;
-}
 
 .posts {
     margin-left: 20%;
