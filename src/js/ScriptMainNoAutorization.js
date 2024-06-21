@@ -76,6 +76,6 @@ function CheckLoadPosts(callback) {
 
 window.onload = function() {
     UpdatePosts = 1;
-    console.log("Переменная myVariable инициализирована");
+    console.log("Переменная UpdatePosts инициализирована");
 };
 

@@ -70,7 +70,7 @@ func handlerIndex(db *sqlx.DB, c *gin.Context) {
 	}
 
 	if isAuthorized {
-		handlerIndexAuthorization(c)
+		handlerIndexAuthorization(c, db)
 	} else {
 		handlerIndexNoAuthorization(c, db)
 	}
@@ -112,9 +112,40 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
 }
 
-func handlerIndexAuthorization(c *gin.Context) {
-	log.Println("Rendering PagePostComments.html")
-	c.HTML(200, "PageMainYesAuthorization.html", nil)
+func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
+	log.Println("Rendering PageMainYesAuthorization.html")
+	post, err := services.GetPostFull(db)
+	if err != nil {
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+		return
+	}
+
+	if len(post) == 0 {
+		log.Println("No posts found")
+		c.HTML(200, "PageMainYesAuthorization.html", gin.H{"posts": []models.FullPost{}})
+		return
+	}
+
+	var fullPosts []models.FullPost
+	for i := 0; i < 10 && i < len(post); i++ {
+		comments, err := services.GetCommentsByPostId(post[i].Id, db)
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+			return
+		}
+
+		fullPosts = append(fullPosts, models.FullPost{
+			Id:                post[i].Id,
+			Title:             post[i].Title,
+			Text:              post[i].Text,
+			AuthorId:          post[i].AuthorId,
+			DateCreatedFormat: post[i].DateCreated.Format("2006-01-02 15:04:05"),
+			AuthorName:        post[i].AuthorName,
+			Comments:          []models.FullComment{},
+			CommentsCount:     len(comments),
+		})
+	}
+	c.HTML(200, "PageMainYesAuthorization.html", gin.H{"posts": fullPosts})
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
