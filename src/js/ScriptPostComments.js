@@ -1,6 +1,6 @@
 const author_id = document.getElementById("NickName");
 const input = document.getElementById("inputComment");
-if (author_id.title == "") {
+if (author_id.title === "") {
     input.disabled = true;
     console.log("Не авторизован");
 }
@@ -20,7 +20,7 @@ if (button) {
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `http://localhost:8080/post/${post_id}/comments`);
 
-            xhr.onload = function (e) {
+            xhr.onload = function () {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     let response = JSON.parse(xhr.responseText);
                     // Обработайте ответ, например, добавьте комментарий на страницу
