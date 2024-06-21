@@ -19,7 +19,7 @@ func PostHandleRegistrationUser(c *gin.Context, db *sqlx.DB) {
 	errors := make(map[string]string)
 
 	if err := c.BindJSON(&emailRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "указаны не все параметры"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
@@ -39,19 +39,19 @@ func PostHandleRegistrationUser(c *gin.Context, db *sqlx.DB) {
 
 	user, err := services.PostUser(db, emailRequest.Email, emailRequest.Name)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
 	sessionID, err := middlewares.GenerateSessionID()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "внутренняя ошибка сервера"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 
 	err = services.CreateSession(db, sessionID, user.Id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "не удалось создать сессию"})
+		c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 		return
 	}
 

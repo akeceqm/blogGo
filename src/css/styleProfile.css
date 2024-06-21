@@ -25,7 +25,7 @@ body {
 
 form {
   background-color: #2e2e2e;
-  padding: 40px;
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -50,11 +50,12 @@ form {
 }
 
 .name-user {
-  font-size: 40px;
+  font-size: 2rem;
   margin-bottom: 10px;
 }
 
 .description-user {
+  font-size: 3rem;
   margin-top: 10px;
 }
 
