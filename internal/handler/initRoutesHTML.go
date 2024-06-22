@@ -2,8 +2,10 @@ package handler
 
 import (
 	"log"
+	"net/http"
 	"post/cmd"
 	"post/internal/database/models"
+	"post/internal/handler/handlerUser"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
@@ -40,6 +42,14 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	})
 	server.GET("/changeProfile", func(c *gin.Context) {
 		c.HTML(200, "changeProfile.html", gin.H{})
+	})
+	server.GET("/changeProfile/:userId", func(c *gin.Context) {
+		user, err := handlerUser.PUTHandleUser(c, db)
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"user": user})
 	})
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)

@@ -3,7 +3,9 @@ package services
 import (
 	"database/sql"
 	"errors"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"post/internal/database/models"
 	"post/internal/middlewares"
 	"time"
@@ -68,13 +70,22 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 	return user, nil
 }
 
-func PutUserData(db *sqlx.DB, userId, name, description, avatar string) (*models.User, error) {
-	var user models.User
-
-	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, name, description, avatar, userId)
+func UpdateUser(db *sqlx.DB, userId string, nick, description, avatar string, c *gin.Context) (models.User, error) {
+	var newUser models.User
+	err := db.Get(&newUser, `UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, nick, description, avatar, userId)
 	if err != nil {
-		return nil, err
+		log.Println("ошибка при обновлении пользователя: ", err)
+		return models.User{}, err
 	}
 
-	return &user, nil
+	user, err := GetUserById(db, userId)
+	if err != nil {
+		log.Println("ошибка при получении данных пользователя после обновления: ", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении данных пользователя после обновления"})
+		return models.User{}, err
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
+	return newUser, nil
+
 }

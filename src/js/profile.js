@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const btnEdit = document.querySelector(".btn-edit");
           if (btnEdit) {
             btnEdit.addEventListener("click", function () {
-              window.location.href = `/changeProfile?userId=${data.id}`;
+              window.location.href = "/changeProfile?userId=" + userId;
             });
           }
         })
