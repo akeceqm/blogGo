@@ -149,3 +149,30 @@ func GETHandlePostsOrder(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, post)
 	return
 }
+
+func GETHandlePostsOrderByUserId(c *gin.Context, db *sqlx.DB) {
+	if c.Param("order") == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "номер ордера не может быть пустым"})
+		return
+	}
+
+	if c.Param("userId") == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": "id пользователя не может быть пустым"})
+		return
+	}
+
+	order, err := strconv.Atoi(c.Param("order"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	post, err := services.GetPostsOrderByUserId(order, c.Param("userId"), db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
+	return
+}

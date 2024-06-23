@@ -11,7 +11,12 @@ let UpdatePosts = 1;
 function fetchData() {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts}`, true);
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const userId = url.searchParams.get('userId');
+    console.log(userId);
+
+    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts}/${userId}`, true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

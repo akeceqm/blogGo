@@ -77,5 +77,12 @@ function CheckLoadPosts(callback) {
 window.onload = function() {
     UpdatePosts = 1;
     console.log("Переменная UpdatePosts инициализирована");
+    CheckLoadPosts(function(success) {
+        if (!success) {
+            const MainBtnLoadPosts = document.getElementById('Main__BtnLoadPosts');
+            const parent = MainBtnLoadPosts.parentNode;
+            const removedButton = parent.removeChild(MainBtnLoadPosts);
+        }
+    });
 };
 

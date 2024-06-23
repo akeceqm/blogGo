@@ -37,6 +37,7 @@
     <div class="posts">
         <div class="posts__inner">
             <div id="MainPosts" class="mainPost">
+                {{if .posts}}
                 {{range .posts}}
                     <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
@@ -66,9 +67,15 @@
                         <a style="font-size: 20px">Загрузить еще</a>
                     </button>
                 </div>
+                {{else}}
+                <div class="btnLoadPosts" >
+                    <button>
+                        <a style="font-size: 20px">Нет постов</a>
+                    </button>
+                </div>
+                {{end}}
             </div>
         </div>
-
     </div>
 </div>
 
