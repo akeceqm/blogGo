@@ -82,7 +82,7 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 
 // Функция для сохранения файла аватара из base64 строки и возврата его пути
 func SaveAvatarBase64(data []byte) string {
-	uploadDir := "./src/img/"
+	uploadDir := "./s/img/"
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 		os.MkdirAll(uploadDir, 0755)
 	}
