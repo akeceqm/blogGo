@@ -43,14 +43,6 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	// Обновление пользователя в базе данных
-	updatedUser, err := services.UpdateUser(db, userId, updatedUser.NickName, updatedUser.Description)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user", "details": err.Error()})
-		log.Printf("Failed to update user: %v", err)
-		return
-	}
-
 	log.Printf("Updated user: %s, %s", updatedUser.NickName, updatedUser.Description)
 
 	if updatedUser.Avatar != "" {
@@ -74,6 +66,14 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 		updatedUser.Avatar = avatarPath
 	}
 
+	// Обновление пользователя в базе данных с новым путем аватара
+	updatedUser, err := services.UpdateUser(db, userId, updatedUser.NickName, updatedUser.Description, updatedUser.Avatar)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user", "details": err.Error()})
+		log.Printf("Failed to update user: %v", err)
+		return
+	}
+
 	log.Println("Updated user avatar:", updatedUser.Avatar)
 
 	// Возвращаем обновленного пользователя в виде JSON
@@ -82,7 +82,7 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 
 // Функция для сохранения файла аватара из base64 строки и возврата его пути
 func SaveAvatarBase64(data []byte) string {
-	uploadDir := "./assets/img/"
+	uploadDir := "./src/img/"
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 		os.MkdirAll(uploadDir, 0755)
 	}

@@ -3,6 +3,7 @@ package services
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"post/internal/database/models"
 	"post/internal/middlewares"
@@ -67,18 +68,17 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 	}
 	return user, nil
 }
-func UpdateUser(db *sqlx.DB, userId string, nick, description string) (models.User, error) {
-	var updatedUser models.User
-
-	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2 WHERE id = $3`, nick, description, userId)
+func UpdateUser(db *sqlx.DB, userId, nickName, description, avatarPath string) (models.User, error) {
+	query := `
+		UPDATE public.user
+		SET nick_name = $1, description = $2, avatar = $3
+		WHERE id = $4
+		RETURNING id, nick_name, description, avatar
+	`
+	var user models.User
+	err := db.Get(&user, query, nickName, description, avatarPath, userId)
 	if err != nil {
-		return updatedUser, err
+		return models.User{}, fmt.Errorf("failed to update user: %w", err)
 	}
-
-	err = db.Get(&updatedUser, `SELECT * FROM public.user WHERE id = $1`, userId)
-	if err != nil {
-		return models.User{}, err
-	}
-
-	return updatedUser, nil
+	return user, nil
 }
