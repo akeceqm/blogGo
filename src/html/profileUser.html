@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="/assets/css/styleProfile.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styleMenu.css">
+  <link rel="stylesheet" href="/assets/css/styleMenu.css">
   <title>Profile</title>
   <style>
     #registration-date {
@@ -20,34 +20,47 @@
   </style>
 </head>
 <body>
-<nav class="menu">
-  <ul class="menu__list">
-    <li class="menu__item">
-      <a href="/" class="menu__link">Лента</a>
-    </li>
-    <li class="menu__item">
-      <a href="#" class="menu__link">Месседжер</a>
-    </li>
-    <li class="menu__item">
-      <a href="#" class="menu__link">Друзья</a>
-    </li>
-  </ul>
-</nav>
-<form>
-  <div class="main-info">
-    <img class="avatar" alt="Avatar" />
-    <div class="text-info">
-      <p id="name-user"></p>
-      <p id="date-user">
-        Дата регистрации на сайте: <span id="registration-date"></span>
-      </p>
-      <article id="description-user"></article>
-    </div>
+<div style="display: block">
+  <div style="display: flex">
+    <nav class="menu">
+      <ul class="menu__list">
+        <li class="menu__item">
+          <a href="/" class="menu__link">Лента</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">Месседжер</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">Друзья</a>
+        </li>
+      </ul>
+    </nav>
+    <form>
+      <div class="main-info">
+        <img class="avatar" alt="Avatar" />
+        <div class="text-info">
+          <p id="name-user"></p>
+          <p id="date-user">
+            Дата регистрации на сайте: <span id="registration-date"></span>
+          </p>
+          <article id="description-user"></article>
+        </div>
+      </div>
+      <div class="btn-container">
+        <a href="/changeProfile"> <button class="btn-edit" type="button">Изменить данные</button></a>
+      </div>
+    </form>
   </div>
-  <div class="btn-container">
-   <a href="/changeProfile"> <button class="btn-edit" type="button">Изменить данные</button></a>
+
+  <div>
+    <button id="BtnCreateNewPost">
+      Создать новый пост
+    </button>
   </div>
-</form>
+</div>
+
+
 <script src="/assets/js/profile.js"></script>
+<script src="/assets/js/ScriptCreateNewPost.js"></script>
 </body>
 </html>

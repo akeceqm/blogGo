@@ -56,7 +56,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 func handlerIndex(db *sqlx.DB, c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists || userID == nil {
-		c.HTML(400, "400.html", gin.H{"Error": "Пользователь не авторизован или сессия истекла"})
 		handlerIndexNoAuthorization(c, db)
 		return
 	}
@@ -122,16 +121,13 @@ func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 
 	if len(post) == 0 {
 		log.Println("No posts found")
-		c.HTML(200, "PageMainYesAuthorization.html", gin.H{"posts": []models.FullPost{}})
-		return
 	}
 
 	var fullPosts []models.FullPost
 	for i := 0; i < 10 && i < len(post); i++ {
 		comments, err := services.GetCommentsByPostId(post[i].Id, db)
 		if err != nil {
-			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
-			return
+			continue
 		}
 
 		fullPosts = append(fullPosts, models.FullPost{
