@@ -30,6 +30,9 @@ func GetHandleUsers(c *gin.Context, db *sqlx.DB) {
 
 // Обработчик для обновления данных пользователя
 func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Methods", "PUT")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
 	userId := c.Param("userId")
 
 	var updatedUser models.User
@@ -77,7 +80,6 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, updatedUser)
 }
 
-// Функция для сохранения файла аватара и возврата его пути
 // Функция для сохранения файла аватара из base64 строки и возврата его пути
 func SaveAvatarBase64(data []byte) string {
 	uploadDir := "./assets/img/"
