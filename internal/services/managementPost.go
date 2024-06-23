@@ -60,6 +60,16 @@ func GetPostFull(db *sqlx.DB) ([]models.FullPost, error) {
 	return post, nil
 }
 
+func GetPostFullByUserId(db *sqlx.DB, userId string) ([]models.FullPost, error) {
+	post := []models.FullPost{}
+
+	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id WHERE public.post.author_id = $1", userId)
+	if err != nil {
+		return post, err
+	}
+	return post, nil
+}
+
 func GetPostsByAuthorId(idAuthor string, db *sqlx.DB) ([]models.Post, error) {
 	var post []models.Post
 
@@ -115,6 +125,30 @@ func GetPostsOrder(number int, db *sqlx.DB) ([]models.FullPost, error) {
 	var posts []models.FullPost
 
 	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id ORDER BY public.post.date_created DESC LIMIT 10 OFFSET $1", (number-1)*10)
+	if err != nil {
+		return []models.FullPost{}, err
+	}
+
+	var FullPosts []models.FullPost
+	for i := 0; i < len(posts); i++ {
+		FullPosts = append(FullPosts, models.FullPost{
+			Id:                posts[i].Id,
+			Title:             posts[i].Title,
+			Text:              posts[i].Text,
+			AuthorId:          posts[i].AuthorId,
+			DateCreatedFormat: posts[i].DateCreated.Format("2006-01-02 15:04:05"),
+			AuthorName:        posts[i].AuthorName,
+			CommentsCount:     posts[i].CommentsCount,
+		})
+	}
+
+	return FullPosts, nil
+}
+
+func GetPostsOrderByUserId(number int, userId string, db *sqlx.DB) ([]models.FullPost, error) {
+	var posts []models.FullPost
+
+	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id WHERE public.post.author_id = $1 ORDER BY public.post.date_created DESC LIMIT 10 OFFSET $2", userId, (number-1)*10)
 	if err != nil {
 		return []models.FullPost{}, err
 	}
