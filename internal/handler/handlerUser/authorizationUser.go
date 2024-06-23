@@ -65,16 +65,12 @@ func GetHandleUserById(c *gin.Context, db *sqlx.DB) {
 	}
 
 	registrationDate := user.DateRegistration.Format("2006-01-02")
-	avatar := ""
-	if user.Avatar.Valid {
-		avatar = user.Avatar.String
-	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":                user.Id,
 		"nick_name":         user.NickName,
 		"date_registration": registrationDate,
-		"description":       user.Description.String,
-		"avatar":            avatar,
+		"description":       user.Description,
+		"avatar":            user.Avatar,
 	})
 }

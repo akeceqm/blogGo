@@ -24,22 +24,6 @@ func GetImageUser(db *sqlx.DB, userId string) (*models.User, error) {
 	return &user, nil
 }
 
-func UploadImageUser(c *gin.Context) {
-	userId := c.Param("userId")
-	file, err := c.FormFile("file")
-	if err != nil {
-		c.HTML(404, "400.html", err.Error())
-		return
-	}
-
-	db := c.MustGet("db").(*sqlx.DB)
-
-	user, err := PostImageUser(db, userId, file.Filename, c)
-	if err != nil {
-		c.HTML(404, "400.html", err.Error())
-		return
-	}
-
-	c.JSON(200, gin.H{"user": user,
-		"message": "success"})
-}
+//func UpdateAvatar(db *sqlx.DB, userId, avatar string) (models.User, error) {
+//
+//}

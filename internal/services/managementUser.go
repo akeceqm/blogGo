@@ -3,9 +3,7 @@ package services
 import (
 	"database/sql"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 	"post/internal/database/models"
 	"post/internal/middlewares"
 	"time"
@@ -59,33 +57,28 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 
 	user.Id = GenerateId()
 	user.Login = GenerateLogin()
-	user.NickName.String = name
+	user.NickName = name
 	user.Email = email
 	user.PasswordHash = GeneratePassword()
 	user.DateRegistration = time.Now()
-	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName.String, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
+	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
 	return user, nil
 }
+func UpdateUser(db *sqlx.DB, userId string, nick, description string) (models.User, error) {
+	var updatedUser models.User
 
-func UpdateUser(db *sqlx.DB, userId string, nick, description, avatar string, c *gin.Context) (models.User, error) {
-	var newUser models.User
-	err := db.Get(&newUser, `UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, nick, description, avatar, userId)
+	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2 WHERE id = $3`, nick, description, userId)
 	if err != nil {
-		log.Println("ошибка при обновлении пользователя: ", err)
+		return updatedUser, err
+	}
+
+	err = db.Get(&updatedUser, `SELECT * FROM public.user WHERE id = $1`, userId)
+	if err != nil {
 		return models.User{}, err
 	}
 
-	user, err := GetUserById(db, userId)
-	if err != nil {
-		log.Println("ошибка при получении данных пользователя после обновления: ", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении данных пользователя после обновления"})
-		return models.User{}, err
-	}
-
-	c.JSON(http.StatusOK, gin.H{"user": user})
-	return newUser, nil
-
+	return updatedUser, nil
 }

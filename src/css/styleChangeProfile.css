@@ -1,6 +1,6 @@
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -43,6 +43,10 @@ form input {
   transition: border-color 0.3s;
 }
 
+form input:focus {
+  border-color: #eca306;
+}
+
 form button {
   margin-top: 20px;
   width: 100%;
@@ -60,4 +64,56 @@ form button {
 form button:hover {
   color: #17181d;
   background-color: #d48d04;
+}
+
+.main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.block-change--image {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-image {
+  display: none;
+}
+
+.image-label {
+  cursor: pointer;
+  background-color: #eca306;
+  color: #fff;
+  padding: 10px 20px;
+  width: 25rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.image-label:hover {
+  background-color: #d48d04;
+}
+
+.text-info input {
+  color: #333;
+}
+
+.text-info input::placeholder {
+  color: #999;
 }

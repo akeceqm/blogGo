@@ -1,17 +1,14 @@
 package handler
 
 import (
-	"log"
-	"net/http"
-	"post/cmd"
-	"post/internal/database/models"
-	"post/internal/handler/handlerUser"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-
+	"log"
+	"post/cmd"
+	"post/internal/database/models"
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
+	"post/internal/handler/handlerUser"
 	"post/internal/services"
 )
 
@@ -40,16 +37,13 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
-	server.GET("/changeProfile", func(c *gin.Context) {
+	server.GET("/changeProfile/:userId", func(c *gin.Context) {
 		c.HTML(200, "changeProfile.html", gin.H{})
 	})
-	server.GET("/changeProfile/:userId", func(c *gin.Context) {
-		user, err := handlerUser.PUTHandleUser(c, db)
-		if err != nil {
-			c.HTML(400, "400.html", gin.H{"Error": err})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"user": user})
+
+	server.PUT("/changeProfile/:userId", func(c *gin.Context) {
+		handlerUser.PUTHandleUser(c, db)
+
 	})
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)
@@ -131,15 +125,11 @@ func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sessionID, err := c.Cookie("session_id")
 		if err != nil || sessionID == "" {
-			handlerIndexNoAuthorization(c, db)
-			c.Abort()
 			return
 		}
 
 		session, err := services.GetSessionByID(db, sessionID)
 		if err != nil || session.UserID == "" {
-			handlerIndexNoAuthorization(c, db)
-			c.Abort()
 			return
 		}
 

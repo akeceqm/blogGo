@@ -8,7 +8,6 @@ import (
 	"post/internal/handler/handlerPost"
 	"post/internal/handler/handlerUser"
 	"post/internal/handler/session"
-	"post/internal/services"
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
@@ -16,21 +15,7 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetHandleUsers(c, db)
 	})
-
-	server.GET("/api/uploadImage/:userId", func(c *gin.Context) {
-		userID := c.Param("userId")
-
-		// Вызов функции для получения изображения пользователя из базы данных
-		user, err := services.GetImageUser(db, userID)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Изображение пользователя не найдено"})
-			return
-		}
-
-		// Здесь user содержит данные пользователя, включая путь к изображению
-		c.JSON(http.StatusOK, gin.H{"user": user})
-	})
-
+	
 	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
 	})
