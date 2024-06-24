@@ -63,7 +63,7 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 			return
 		}
-		userName = user.NickName.String
+		userName = user.NickName
 	} else {
 		userName = "Авторизуйтесь чтобы комментировать"
 	}

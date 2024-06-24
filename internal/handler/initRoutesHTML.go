@@ -30,10 +30,6 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	})
 
-	server.GET("/profileUser", func(c *gin.Context) {
-		handlerIndexProfileUser(c, db)
-	})
-
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
@@ -115,7 +111,6 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
 }
 
-<<<<<<< Updated upstream
 func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 	log.Println("Rendering PageMainYesAuthorization.html")
 	post, err := services.GetPostFull(db)
@@ -195,13 +190,6 @@ func handlerIndexProfileUser(c *gin.Context, db *sqlx.DB) {
 	}
 
 	c.HTML(200, "profileUser.html", gin.H{"posts": fullPosts})
-=======
-// TODO сделать загрузку постов
-func handlerIndexAuthorization(c *gin.Context) {
-	log.Println("Rendering PagePostComments.html")
-	c.HTML(200, "PageMainYesAuthorization.html", nil)
-
->>>>>>> Stashed changes
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {

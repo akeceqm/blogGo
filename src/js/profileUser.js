@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("userId");
     if (userId) {
+        console.log("User ID:", userId);
         fetch(`/api/user/${userId}`)
             .then((response) => {
                 if (!response.ok) {
