@@ -16,7 +16,7 @@ function fetchData() {
     const userId = url.searchParams.get('userId');
     console.log(userId);
 
-    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts}/${userId}`, true);
+    xhr.open('GET', `/posts/order/${UpdatePosts}/${userId}`, true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -59,7 +59,7 @@ function updatePage(data) {
 function CheckLoadPosts(callback) {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts+1}`, true);
+    xhr.open('GET', `/posts/order/${UpdatePosts+1}`, true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {

@@ -9,7 +9,7 @@ import (
 func CreatePost(title, text string, authorId string, db *sqlx.DB) (models.Post, error) {
 	post := models.Post{}
 
-	err := db.Get("SELECT * FROM public.post WHERE id = $1", authorId)
+	err := db.Get(&models.User{}, "SELECT * FROM public.user WHERE id = $1", authorId)
 
 	if err != nil {
 		return models.Post{}, err
@@ -21,7 +21,7 @@ func CreatePost(title, text string, authorId string, db *sqlx.DB) (models.Post, 
 	post.DateCreated = time.Now()
 	post.AuthorId = authorId
 
-	_, err = db.Exec("INSERT INTO public.post (id, title, text, date, author_id) VALUES ($1, $2, $3, $4, $5)", post.Id, post.Title, post.Text, post.DateCreated, post.AuthorId)
+	_, err = db.Exec("INSERT INTO public.post (id, title, text, date_created, author_id) VALUES ($1, $2, $3, $4, $5)", post.Id, post.Title, post.Text, post.DateCreated, post.AuthorId)
 	if err != nil {
 		return models.Post{}, err
 	}
@@ -124,7 +124,7 @@ func DeletePost(id string, db *sqlx.DB) error {
 func GetPostsOrder(number int, db *sqlx.DB) ([]models.FullPost, error) {
 	var posts []models.FullPost
 
-	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id ORDER BY public.post.date_created DESC LIMIT 10 OFFSET $1", (number-1)*10)
+	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id ORDER BY public.post.date_created ASC LIMIT 10 OFFSET $1", (number-1)*10)
 	if err != nil {
 		return []models.FullPost{}, err
 	}
@@ -148,7 +148,7 @@ func GetPostsOrder(number int, db *sqlx.DB) ([]models.FullPost, error) {
 func GetPostsOrderByUserId(number int, userId string, db *sqlx.DB) ([]models.FullPost, error) {
 	var posts []models.FullPost
 
-	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id WHERE public.post.author_id = $1 ORDER BY public.post.date_created DESC LIMIT 10 OFFSET $2", userId, (number-1)*10)
+	err := db.Select(&posts, "SELECT public.post.*, public.user.nick_name, COALESCE(comment_counts.comment_count, 0) AS comment_count FROM public.post JOIN public.user ON public.post.author_id = public.user.id LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM public.comment GROUP BY post_id) AS comment_counts ON public.post.id = comment_counts.post_id WHERE public.post.author_id = $1 ORDER BY public.post.date_created ASC LIMIT 10 OFFSET $2", userId, (number-1)*10)
 	if err != nil {
 		return []models.FullPost{}, err
 	}
