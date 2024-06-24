@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"post/internal/database/models"
 	"post/internal/services"
-	"time"
 )
 
 // Обработчик для получения данных пользователя по ID
@@ -49,21 +48,21 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 		// Декодируем base64 строку в изображение
 		avatarData, err := base64.StdEncoding.DecodeString(updatedUser.Avatar)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid base64 string for avatar"})
+			// Логируем ошибку, но не возвращаем ее клиенту
 			log.Printf("Failed to decode base64 avatar: %v", err)
-			return
-		}
+			// Продолжаем выполнение, используя текущий URL аватара
+		} else {
+			// Сохраняем изображение в файл (например, в ./assets/img/ с уникальным именем)
+			avatarPath := SaveAvatarBase64(avatarData, userId)
+			if avatarPath == "" {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save avatar"})
+				log.Println("Failed to save avatar")
+				return
+			}
 
-		// Сохраняем изображение в файл (например, в ./assets/img/ с уникальным именем)
-		avatarPath := SaveAvatarBase64(avatarData)
-		if avatarPath == "" {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save avatar"})
-			log.Println("Failed to save avatar")
-			return
+			// Обновляем путь аватара пользователя в структуре
+			updatedUser.Avatar = avatarPath
 		}
-
-		// Обновляем путь аватара пользователя в структуре
-		updatedUser.Avatar = avatarPath
 	}
 
 	// Обновление пользователя в базе данных с новым путем аватара
@@ -81,13 +80,13 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 }
 
 // Функция для сохранения файла аватара из base64 строки и возврата его пути
-func SaveAvatarBase64(data []byte) string {
+func SaveAvatarBase64(data []byte, userId string) string {
 	uploadDir := "./src/img/"
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 		os.MkdirAll(uploadDir, 0755)
 	}
 
-	filename := generateUniqueFilename("avatar.jpg")
+	filename := fmt.Sprintf("%s.jpg", userId)
 	filePath := filepath.Join(uploadDir, filename)
 
 	if err := ioutil.WriteFile(filePath, data, 0644); err != nil {
@@ -97,11 +96,4 @@ func SaveAvatarBase64(data []byte) string {
 
 	log.Printf("Avatar saved to %s", filePath)
 	return filepath.ToSlash(filepath.Join("/assets/img/", filename))
-}
-
-// Функция для генерации уникального имени файла на основе текущего времени и случайного числа
-func generateUniqueFilename(originalFilename string) string {
-	ext := filepath.Ext(originalFilename)
-	filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), ext)
-	return filename
 }
