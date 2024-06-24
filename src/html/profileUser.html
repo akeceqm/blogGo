@@ -13,16 +13,40 @@
     #registration-date {
       color: #f7a600;
     }
+<<<<<<< Updated upstream
     a{
       color:inherit;
       text-decoration: none;
     }
     .menu{
       margin-right: 4%;
+=======
+    .btn-back{
+      background-color: #f7a600;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      width: 150px;
+    }
+    .btn-back:hover {
+      background-color: #d68900;
+    }
+    a{
+      text-decoration: none;
+      color:  inherit;
+    }
+    .a-back{
+      margin-right: 5%;
+      margin-top: 1%;
+>>>>>>> Stashed changes
     }
   </style>
 </head>
 <body>
+<<<<<<< Updated upstream
 <div style="display: block">
   <div style="display: flex">
     <nav class="menu">
@@ -105,6 +129,20 @@
           {{end}}
         </div>
       </div>
+=======
+<a class="a-back" href="/"><button class="btn-back" type="button">Назад</button></a>
+
+<form>
+
+  <div class="main-info">
+    <img class="avatar" alt="Avatar" />
+    <div class="text-info">
+      <p id="name-user"></p>
+      <p id="date-user">
+        Дата регистрации на сайте: <span id="registration-date"></span>
+      </p>
+      <article id="description-user"></article>
+>>>>>>> Stashed changes
     </div>
   </div>
 
