@@ -54,15 +54,15 @@
 
             {{else}}
                 <div class="comment">
-                    <div class="info">
-                        <div class="username">Нет комментариев</div>
-                    </div>
-                </div>
-            {{end}}
+        <div class="info">
+            <div class="username">Нет комментариев</div>
+        </div>
     </div>
+    {{end}}
+</div>
 
-    <div class="mainInput">
-        <p class="hidenNickName" id="NickName">1</p>
+<div class="mainInput">
+    <p title="{{ .userID }}" class="hidenNickName" id="NickName">{{ .userName }}</p>
         <input class="input" id="inputComment" />
         <button id="btnSendComment"></button>
     </div>

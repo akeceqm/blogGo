@@ -92,4 +92,8 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 		handlerPost.GETHandlePostsOrder(c, db)
 	})
 
+	server.GET("/posts/order/:order/:userId", func(c *gin.Context) {
+		handlerPost.GETHandlePostsOrderByUserId(c, db)
+	})
+
 }

@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/assets/css/StylePosts.css" />
   <link href="/assets/css/styleProfile.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styleMenu.css">
+  <link rel="stylesheet" href="/assets/css/styleMenu.css" />
+
+
   <title>Profile</title>
   <style>
     #registration-date {
@@ -20,34 +23,101 @@
   </style>
 </head>
 <body>
-<nav class="menu">
-  <ul class="menu__list">
-    <li class="menu__item">
-      <a href="/" class="menu__link">Лента</a>
-    </li>
-    <li class="menu__item">
-      <a href="#" class="menu__link">Месседжер</a>
-    </li>
-    <li class="menu__item">
-      <a href="#" class="menu__link">Друзья</a>
-    </li>
-  </ul>
-</nav>
-<form>
-  <div class="main-info">
-    <img class="avatar" alt="Avatar" />
-    <div class="text-info">
-      <p id="name-user"></p>
-      <p id="date-user">
-        Дата регистрации на сайте: <span id="registration-date"></span>
-      </p>
-      <article id="description-user"></article>
+<div style="display: block">
+  <div style="display: flex">
+    <nav class="menu">
+      <ul class="menu__list">
+        <li class="menu__item">
+          <a href="/" class="menu__link">Лента</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">Месседжер</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">Друзья</a>
+        </li>
+      </ul>
+    </nav>
+    <form>
+      <div class="main-info">
+        <img class="avatar" alt="Avatar" />
+        <div class="text-info">
+          <p id="name-user"></p>
+          <p id="date-user">
+            Дата регистрации на сайте: <span id="registration-date"></span>
+          </p>
+          <article id="description-user"></article>
+        </div>
+      </div>
+      <div class="btn-container">
+        <a href="/changeProfile"> <button class="btn-edit" type="button">Изменить данные</button></a>
+      </div>
+    </form>
+  </div>
+
+  <div style="display: flex; margin-top: 20px">
+
+    <div>
+      <button class="btnLoadPosts" id="BtnCreateNewPost" style="cursor: pointer">
+        <a>Создать новый пост</a>
+      </button>
+    </div>
+
+    <div class="posts">
+      <div class="posts__inner">
+        <div id="MainPosts" class="mainPost">
+          {{if .posts}}
+            {{range .posts}}
+              <div id="mainPost__inner" class="mainPost__inner">
+                <div class="post">
+                  <div class="header">
+                    <div class="post__avatar"></div>
+                    <div class="info">
+                      <div class="username">{{ .AuthorName }}</div>
+                      <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                    </div>
+                  </div>
+                  <div class="title">{{ .Title }}</div>
+                  <div class="content">
+                    {{ .Text}}
+                  </div>
+                </div>
+                <div class="footer">
+                  <div class="comments">
+                    <a class="commentCount" href="/h/post/{{ .Id }}/comments">
+                      Комментарии: {{ .CommentsCount }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {{end}}
+            <div id="Main__BtnLoadPosts" class="btnLoadPosts" >
+              <button id="BtnLoadPosts">
+                <a style="font-size: 20px">Загрузить еще</a>
+              </button>
+            </div>
+          {{else}}
+            <div class="btnLoadPosts" >
+              <button>
+                <a style="font-size: 20px">Нет постов</a>
+              </button>
+            </div>
+          {{end}}
+        </div>
+      </div>
     </div>
   </div>
+
   <div class="btn-container">
     <button class="btn-edit" type="button">Изменить данные</button>
   </div>
 </form>
-<script src="/assets/js/profileUser.js"></script>
+</div>
+
+
+<script src="/assets/js/profile.js"></script>
+<script src="/assets/js/ScriptCreateNewPost.js"></script>
+<script src="/assets/js/ScriptLoadUserPosts.js"></script>
+
 </body>
 </html>

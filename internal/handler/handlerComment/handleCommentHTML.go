@@ -3,6 +3,7 @@ package handlerComment
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"log"
 	"net/http"
 	"post/internal/database/models"
 	"post/internal/services"
@@ -49,6 +50,24 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 		CommentsCount:     len(comments),
 	}
 
-	c.HTML(http.StatusOK, "PagePostComments.html", gin.H{"posts": fullPostAndComments})
+	userID, exists := c.Get("userID")
+	if !exists || userID == nil {
+		log.Println("Пользователь не авторизован или сессия истекла fgdfg")
+		userID = ""
+	}
+
+	var userName string
+	if userID != "" {
+		user, err = services.GetUserById(db, userID.(string))
+		if err != nil {
+			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
+			return
+		}
+		userName = user.NickName.String
+	} else {
+		userName = "Авторизуйтесь чтобы комментировать"
+	}
+
+	c.HTML(http.StatusOK, "PagePostComments.html", gin.H{"posts": fullPostAndComments, "userID": userID, "userName": userName})
 	return
 }
