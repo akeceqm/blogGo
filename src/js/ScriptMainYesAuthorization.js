@@ -11,7 +11,7 @@ let UpdatePosts = 1;
 function fetchData() {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts}`, true);
+    xhr.open('GET', `/posts/order/${UpdatePosts}`, true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -54,7 +54,7 @@ function updatePage(data) {
 function CheckLoadPosts(callback) {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `http://localhost:8080/posts/order/${UpdatePosts+1}`, true);
+    xhr.open('GET', `/posts/order/${UpdatePosts+1}`, true);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {

@@ -41,8 +41,8 @@ button {
     align-items: center;
     background-color: #292a2b;
     border-radius: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin: 10px 20px;
 }
 
 .post {
