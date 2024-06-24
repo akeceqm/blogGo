@@ -12,9 +12,6 @@ import (
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	// Работа с пользователями
-	server.GET("/users", func(c *gin.Context) {
-		handlerUser.GetHandleUsers(c, db)
-	})
 
 	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
@@ -36,6 +33,10 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 			c.Redirect(http.StatusFound, "/profileUser?userId="+userID.(string))
 		})
 	}
+	
+	server.GET("/profileUser", func(c *gin.Context) {
+		handlerIndexProfileUser(c, db)
+	})
 
 	// Работа с сессиями (cookies)
 	server.GET("/session", func(c *gin.Context) {

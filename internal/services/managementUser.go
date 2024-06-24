@@ -3,6 +3,7 @@ package services
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"post/internal/database/models"
 	"post/internal/middlewares"
@@ -57,24 +58,27 @@ func PostUser(db *sqlx.DB, email string, name string) (models.User, error) {
 
 	user.Id = GenerateId()
 	user.Login = GenerateLogin()
-	user.NickName.String = name
+	user.NickName = name
 	user.Email = email
 	user.PasswordHash = GeneratePassword()
 	user.DateRegistration = time.Now()
-	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName.String, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
+	_, err := db.Exec(`INSERT INTO public.user (id,nick_name, login,email, password_hash,ip_address, date_registration) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, user.Id, user.NickName, user.Login, user.Email, middlewares.PasswordHash(user.PasswordHash), middlewares.GetApi(), user.DateRegistration)
 	if err != nil {
 		return user, errors.New("Неудачная регистрация. Попробуйте еще раз!")
 	}
 	return user, nil
 }
-
-func PutUserData(db *sqlx.DB, userId, name, description, avatar string) (*models.User, error) {
+func UpdateUser(db *sqlx.DB, userId, nickName, description, avatarPath string) (models.User, error) {
+	query := `
+		UPDATE public.user
+		SET nick_name = $1, description = $2, avatar = $3
+		WHERE id = $4
+		RETURNING id, nick_name, description, avatar
+	`
 	var user models.User
-
-	_, err := db.Exec(`UPDATE public.user SET nick_name = $1, description = $2, avatar = $3 WHERE id = $4`, name, description, avatar, userId)
+	err := db.Get(&user, query, nickName, description, avatarPath, userId)
 	if err != nil {
-		return nil, err
+		return models.User{}, fmt.Errorf("failed to update user: %w", err)
 	}
-
-	return &user, nil
+	return user, nil
 }
