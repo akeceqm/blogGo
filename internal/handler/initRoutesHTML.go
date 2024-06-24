@@ -27,19 +27,22 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	cmd.Server.GET("/", func(c *gin.Context) {
 		handlerIndex(db, c)
+	})
 
+	server.GET("/profileUser", func(c *gin.Context) {
+		handlerIndexProfileUser(c, db)
 	})
 
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
-		c.HTML(200, "profileUser.html", gin.H{})
+		handlerIndexProfileUser(c, db)
 	})
+
 	server.GET("/changeProfile/:userId", func(c *gin.Context) {
 		c.HTML(200, "changeProfile.html", gin.H{})
 	})
 
 	server.PUT("/changeProfile/:userId", func(c *gin.Context) {
 		handlerUser.PUTHandleUser(c, db)
-
 	})
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)
