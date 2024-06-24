@@ -1,0 +1,131 @@
+.pop_up {
+    transform: translate(0%, 0%) scale(0);
+    transition: .4s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 2;
+}
+
+.pop_up.active {
+    transform: translate(0%, 0%) scale(100%);
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.pop_up_container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.pop_up_body {
+    margin: auto;
+    width: 600px;
+    height: 500px;
+    background-color: #2A2A2A;
+    border-radius: 25px;
+    text-align: center;
+    position: relative;
+}
+
+.pop_up_body p {
+    font-size: 16px;
+    color: #B1B1B1;
+    margin-top: 10px;
+}
+
+.TitleInput {
+    display: block;
+    width: 550px;
+    max-width: 550px;
+    min-width: 365px;
+    height: 60px;
+    max-height: 60px;
+    min-height: 20px;
+    margin: 20px auto;
+    border-radius: 15px;
+    padding-left: 10px;
+    font-size: 18px;
+    background-color: #444444;
+    color: #ffffff;
+    border: #444444 solid 1px;
+    padding-top: 3px;
+}
+
+.TitleInput:focus {
+    outline: none;
+}
+
+.TextInput {
+    display: block;
+    width: 550px;
+    max-width: 550px;
+    min-width: 365px;
+    height: 300px;
+    max-height: 300px;
+    min-height: 150px;
+    margin: 20px auto;
+    border-radius: 15px;
+    padding-left: 10px;
+    font-size: 18px;
+    background-color: #444444;
+    color: #ffffff;
+    border: #444444 solid 1px;
+    padding-top: 3px;
+}
+.TextInput:focus {
+    outline: none;
+}
+
+.pop_up__Btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.BtnSucces {
+    margin-left: 80px;
+    background-color: #1C1C1C;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    border-color: transparent;
+}
+.BtnSucces p {
+    margin-top: 0;
+    padding: 10px 20px;
+    color: #b6b6b6;
+    cursor: pointer;
+}
+
+.BtnClose {
+    background-color: #1C1C1C;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    border-color: transparent;
+}
+.BtnClose p {
+    margin-top: 0;
+    padding: 10px 20px;
+    color: #b6b6b6;
+    cursor: pointer;
+}
+
+.BtnSucces:hover p {
+    transition: all .2s;
+    color: #00D408;
+}
+.BtnClose:hover p {
+    transition: all .2s;
+    color: #ff0000;
+}
