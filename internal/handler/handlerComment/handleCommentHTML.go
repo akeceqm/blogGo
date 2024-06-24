@@ -45,7 +45,7 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 		DateCreated:       post.DateCreated,
 		DateCreatedFormat: post.DateCreated.Format("2006-01-02 15:04:05"),
 		AuthorId:          post.AuthorId,
-		AuthorName:        user.NickName.String,
+		AuthorName:        user.NickName,
 		Comments:          comments,
 		CommentsCount:     len(comments),
 	}
@@ -63,7 +63,7 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 			c.HTML(400, "400.html", gin.H{"Error": err.Error()})
 			return
 		}
-		userName = user.NickName.String
+		userName = user.NickName
 	} else {
 		userName = "Авторизуйтесь чтобы комментировать"
 	}

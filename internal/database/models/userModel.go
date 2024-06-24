@@ -1,20 +1,17 @@
 package models
 
-import (
-	"database/sql"
-	"time"
-)
+import "time"
 
 type User struct {
-	Id               string         `db:"id" json:"id"`
-	NickName         sql.NullString `db:"nick_name" json:"nick_name"`
-	Login            string         `db:"login" json:"login"`
-	Email            string         `db:"email" json:"email"`
-	PasswordHash     string         `db:"password_hash" json:"password_hash"`
-	Ip               sql.NullString `db:"ip_address" json:"ip_address"`
-	DateRegistration time.Time      `db:"date_registration" json:"date_registration"`
-	Description      sql.NullString `db:"description" json:"description"`
-	Avatar           sql.NullString `db:"avatar" json:"avatar"`
+	Id               string    `json:"id" db:"id"`
+	NickName         string    `json:"nick_name" db:"nick_name"`
+	Login            string    `json:"login" db:"login"`
+	Email            string    `json:"email" db:"email"`
+	PasswordHash     string    `json:"password_hash" db:"password_hash"`
+	Avatar           string    `json:"avatar" db:"avatar"`
+	DateRegistration time.Time `json:"date_registration" db:"date_registration"`
+	Description      string    `json:"description" db:"description"`
+	IPAddress        string    `json:"ip_address" db:"ip_address"`
 }
 
 type IPResponse struct {

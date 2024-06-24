@@ -1,15 +1,14 @@
 package handler
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	"log"
 	"post/cmd"
 	"post/internal/database/models"
-
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
-
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
+	"post/internal/handler/handlerUser"
 	"post/internal/services"
 )
 
@@ -31,15 +30,16 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 
 	})
 
-	server.GET("/profileUser", func(c *gin.Context) {
-		handlerIndexProfileUser(c, db)
-	})
-
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
-	server.GET("/changeProfile", func(c *gin.Context) {
+	server.GET("/changeProfile/:userId", func(c *gin.Context) {
 		c.HTML(200, "changeProfile.html", gin.H{})
+	})
+
+	server.PUT("/changeProfile/:userId", func(c *gin.Context) {
+		handlerUser.PUTHandleUser(c, db)
+
 	})
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)
