@@ -18,17 +18,14 @@ if (button) {
         console.log("xxx")
         if (input && input.value) {
             let xhr = new XMLHttpRequest();
-            xhr.open("POST", `http://localhost:8080/post/${post_id}/comments`);
+            xhr.open("POST", `/post/${post_id}/comments`);
 
             xhr.onload = function () {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     let response = JSON.parse(xhr.responseText);
-                    // Обработайте ответ, например, добавьте комментарий на страницу
                     console.log(response);
-
                     location.reload();
                 } else {
-                    // Ошибка на стороне сервера
                     console.error("Server error:", xhr.status, xhr.statusText);
                     location.reload();
                 }

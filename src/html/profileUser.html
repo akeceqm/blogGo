@@ -6,8 +6,7 @@
   <link rel="stylesheet" href="/assets/css/StylePosts.css" />
   <link href="/assets/css/styleProfile.css" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/styleMenu.css" />
-
-
+  <link rel="stylesheet" href="/assets/css/StylePopup.css">
   <title>Profile</title>
   <style>
     #registration-date {
@@ -76,6 +75,9 @@
                       <div class="username">{{ .AuthorName }}</div>
                       <div class="timestamp">{{ .DateCreatedFormat }}</div>
                     </div>
+                    <div class="post__options">
+                      <img src="/assets/img/edit_pen.svg"/>
+                    </div>
                   </div>
                   <div class="title">{{ .Title }}</div>
                   <div class="content">
@@ -110,9 +112,89 @@
 
 </div>
 
+<div id="Pop_up" class="pop_up">
+  <div class="pop_up_container">
+    <div class="pop_up_body">
+      <p>Создание поста</p>
+      <textarea class="TitleInput" id="TitleInput" rows="2" placeholder="Загаловок"></textarea>
+      <textarea class="TextInput" id="TextInput" rows="2" placeholder="Текст поста..."></textarea>
+      <div class="pop_up__Btn">
+        <div class="BtnClose">
+          <button id="BtnClose">
+            <p>Отмена</p>
+          </button>
+        </div>
+        <div class="BtnSucces">
+          <button id="BtnSucces">
+            <p>Создать пост</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+  const openPopUp = document.getElementById('BtnCreateNewPost')
+  const closePopUp = document.getElementById('BtnClose')
+  const popUp = document.getElementById('Pop_up')
+  const createPost = document.getElementById('BtnSucces')
+
+  openPopUp.onclick = () => {
+    popUp.classList.add('active')
+  }
+  closePopUp.addEventListener('click', () => {
+    popUp.classList.remove('active')
+  })
+
+  createPost.onclick = createNewPost
+  console.log("sdfgiomsyhdtjju")
+  function createNewPost() {
+    const TitleInput = document.getElementById('TitleInput')
+    const TextInput = document.getElementById('TextInput')
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const userId = url.searchParams.get('userId');
+
+    if (TitleInput.value == "") {
+      TitleInput.style.borderColor = '#ff0000'
+      return
+    }else {
+      TitleInput.style.borderColor = 'transparent'
+    }
+    if (TextInput.value == "") {
+      TextInput.style.borderColor = '#ff0000'
+      return;
+    }else {
+      TextInput.style.borderColor = 'transparent'
+    }
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", `/posts`);
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        let response = JSON.parse(xhr.responseText);
+        console.log(response);
+        location.reload();
+      } else {
+        console.error("Server error:", xhr.status, xhr.statusText);
+        location.reload();
+      }
+    };
+
+    let newPostData = JSON.stringify({
+      title: TitleInput.value,
+      text: TextInput.value,
+      author_id: userId,
+    });
+    console.log(newPostData);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(newPostData);
+    TitleInput.value = ""
+    TextInput.value = ""
+  }
+</script>
 <script src="/assets/js/profile.js"></script>
-<script src="/assets/js/ScriptCreateNewPost.js"></script>
 <script src="/assets/js/ScriptLoadUserPosts.js"></script>
 </body>
 </html>

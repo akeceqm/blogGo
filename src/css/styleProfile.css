@@ -86,3 +86,11 @@ form {
   margin-left: 20px;
 }
 
+.post__options {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  display: flex;
+}
+
