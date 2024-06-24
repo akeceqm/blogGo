@@ -53,7 +53,7 @@ func GetPostById(id string, db *sqlx.DB) (models.Post, error) {
 func GetPostFull(db *sqlx.DB) ([]models.FullPost, error) {
 	post := []models.FullPost{}
 
-	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id")
+	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id order by public.post.date_created DESC")
 	if err != nil {
 		return post, err
 	}
@@ -63,7 +63,7 @@ func GetPostFull(db *sqlx.DB) ([]models.FullPost, error) {
 func GetPostFullByUserId(db *sqlx.DB, userId string) ([]models.FullPost, error) {
 	post := []models.FullPost{}
 
-	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id WHERE public.post.author_id = $1", userId)
+	err := db.Select(&post, "SELECT public.post.*, public.user.nick_name FROM public.post JOIN public.user ON public.post.author_id = public.user.id WHERE public.post.author_id = $1 order by public.post.date_created DESC ", userId)
 	if err != nil {
 		return post, err
 	}
