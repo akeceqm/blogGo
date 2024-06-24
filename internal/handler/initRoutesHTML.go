@@ -1,15 +1,14 @@
 package handler
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	"log"
 	"post/cmd"
 	"post/internal/database/models"
-
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
-
 	"post/internal/handler/handlerComment"
 	"post/internal/handler/handlerPost"
+	"post/internal/handler/handlerUser"
 	"post/internal/services"
 )
 
@@ -38,8 +37,13 @@ func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/profileUser/:userId", func(c *gin.Context) {
 		c.HTML(200, "profileUser.html", gin.H{})
 	})
-	server.GET("/changeProfile", func(c *gin.Context) {
+	server.GET("/changeProfile/:userId", func(c *gin.Context) {
 		c.HTML(200, "changeProfile.html", gin.H{})
+	})
+
+	server.PUT("/changeProfile/:userId", func(c *gin.Context) {
+		handlerUser.PUTHandleUser(c, db)
+
 	})
 	server.GET("/h/post/:idPost/comments", func(c *gin.Context) {
 		handlerComment.GETHandlePostCommentsHTML(c, db)
@@ -111,6 +115,7 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
 }
 
+<<<<<<< Updated upstream
 func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 	log.Println("Rendering PageMainYesAuthorization.html")
 	post, err := services.GetPostFull(db)
@@ -190,6 +195,13 @@ func handlerIndexProfileUser(c *gin.Context, db *sqlx.DB) {
 	}
 
 	c.HTML(200, "profileUser.html", gin.H{"posts": fullPosts})
+=======
+// TODO сделать загрузку постов
+func handlerIndexAuthorization(c *gin.Context) {
+	log.Println("Rendering PagePostComments.html")
+	c.HTML(200, "PageMainYesAuthorization.html", nil)
+
+>>>>>>> Stashed changes
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {

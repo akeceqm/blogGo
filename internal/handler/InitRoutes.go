@@ -15,7 +15,7 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	server.GET("/users", func(c *gin.Context) {
 		handlerUser.GetHandleUsers(c, db)
 	})
-
+	
 	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
 	})
