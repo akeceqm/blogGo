@@ -33,10 +33,6 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 			c.Redirect(http.StatusFound, "/profileUser?userId="+userID.(string))
 		})
 	}
-	
-	server.GET("/profileUser", func(c *gin.Context) {
-		handlerIndexProfileUser(c, db)
-	})
 
 	// Работа с сессиями (cookies)
 	server.GET("/session", func(c *gin.Context) {
