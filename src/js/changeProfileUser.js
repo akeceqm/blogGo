@@ -105,23 +105,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (avatarFile) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                let avatarBase64 = e.target.result;
-                // Убедитесь, что изображение представлено в чистом формате Base64 без префикса
-                if (avatarBase64.startsWith('data:image/jpeg;base64,')) {
-                    avatarBase64 = avatarBase64.replace(/^data:image\/jpeg;base64,/, '');
-                }
+                const avatarBase64 = e.target.result.split(',')[1]; // Получаем только base64 часть
                 data.avatar = avatarBase64;
 
                 updateProfile(data);
             };
             reader.readAsDataURL(avatarFile);
         } else {
-            // Если аватар не выбран заново, используем текущий URL аватара, если он есть
+            // Если аватар не выбран заново и текущий URL аватара есть, отправляем его
             if (currentAvatar) {
                 data.avatar = currentAvatar;
+                updateProfile(data); // Отправляем данные на обновление профиля
+            } else {
+                // Если аватар не выбран и текущего URL аватара нет, обновляем без аватара
+                updateProfile(data); // Отправляем данные на обновление профиля
             }
-
-            updateProfile(data);
         }
 
         console.log('New Name:', newName);
