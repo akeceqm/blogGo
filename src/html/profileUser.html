@@ -10,7 +10,7 @@
   <title>Profile</title>
   <style>
     #registration-date {
-      color: #f7a600;
+      color: #9d9d9d;
     }
     a{
       color:inherit;
@@ -62,7 +62,7 @@
       <div class="main-info">
         <img class="avatar" alt="Avatar" />
         <div class="text-info">
-          <p id="name-user"></p>
+          <p style="color: #f7a600; margin-bottom: 10px" id="name-user"></p>
           <p id="date-user">
             Дата регистрации на сайте: <span id="registration-date"></span>
           </p>
@@ -79,7 +79,7 @@
 
     <div>
       <button class="btnLoadPosts" id="BtnCreateNewPost" style="cursor: pointer">
-        <a>Создать новый пост</a>
+        <a style="color: #1C1C1C">Создать новый пост</a>
       </button>
     </div>
 
@@ -99,6 +99,9 @@
                     <div class="post__options">
                       <button style="cursor: pointer" class="BtnEditPost" title="{{.Title}}|{{.Text}}" id="BtnEdit_{{.Id}}">
                         <img style="cursor: pointer" src="/assets/img/edit_pen.svg"/>
+                      </button>
+                      <button style="cursor: pointer" class="BtnDelPost" title="{{.Title}}|{{.Text}}" id="BtnDel_{{.Id}}">
+                        <img style="cursor: pointer" src="/assets/img/DelTrash.svg"/>
                       </button>
                     </div>
                   </div>
@@ -130,7 +133,6 @@
           {{end}}
         </div>
       </div>
-<a class="a-back" href="/"><button class="btn-back" type="button">Назад</button></a>
     </div>
   </div>
 </div>
@@ -171,7 +173,7 @@
         </div>
         <div class="BtnSucces">
           <button id="BtnSuccesEdit">
-            <p>Создать пост</p>
+            <p>Изменить пост</p>
           </button>
         </div>
       </div>
@@ -179,67 +181,29 @@
   </div>
 </div>
 
-<script>
-  const openPopUp = document.getElementById('BtnCreateNewPost')
-  const closePopUp = document.getElementById('BtnClose')
-  const popUp = document.getElementById('Pop_up')
-  const createPost = document.getElementById('BtnSucces')
+<div id="Pop_upDel" class="pop_up">
+  <div class="pop_up_container">
+    <div class="pop_up_body">
+      <p style="color: #ff0000">Удаление поста</p>
+      <textarea class="TitleInput" id="TitleInputDel" rows="2" placeholder="Загаловок" readonly></textarea>
+      <textarea class="TextInput" id="TextInputDel" rows="2" placeholder="Текст поста..." readonly></textarea>
+      <div class="pop_up__Btn">
+        <div class="BtnClose">
+          <button id="BtnCloseDel">
+            <p>Отмена</p>
+          </button>
+        </div>
+        <div class="BtnSucces">
+          <button id="BtnSuccesDel">
+            <p>Удалить</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  openPopUp.onclick = () => {
-    popUp.classList.add('active')
-  }
-  closePopUp.addEventListener('click', () => {
-    popUp.classList.remove('active')
-  })
-
-  createPost.onclick = createNewPost
-  console.log("sdfgiomsyhdtjju")
-  function createNewPost() {
-    const TitleInput = document.getElementById('TitleInput')
-    const TextInput = document.getElementById('TextInput')
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const userId = url.searchParams.get('userId');
-
-    if (TitleInput.value == "") {
-      TitleInput.style.borderColor = '#ff0000'
-      return
-    }else {
-      TitleInput.style.borderColor = 'transparent'
-    }
-    if (TextInput.value == "") {
-      TextInput.style.borderColor = '#ff0000'
-      return;
-    }else {
-      TextInput.style.borderColor = 'transparent'
-    }
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", `/posts`);
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        let response = JSON.parse(xhr.responseText);
-        console.log(response);
-        location.reload();
-      } else {
-        console.error("Server error:", xhr.status, xhr.statusText);
-        location.reload();
-      }
-    };
-
-
-    let newPostData = JSON.stringify({
-      title: TitleInput.value,
-      text: TextInput.value,
-      author_id: userId,
-    });
-    console.log(newPostData);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(newPostData);
-    TitleInput.value = ""
-    TextInput.value = ""
-  }
-</script>
+<script src="/assets/js/ScriptManagementPostUser.js"></script>
 <script src="/assets/js/profileUser.js"></script>
 <script src="/assets/js/ScriptLoadUserPosts.js"></script>
 

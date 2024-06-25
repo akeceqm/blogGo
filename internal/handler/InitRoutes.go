@@ -12,7 +12,6 @@ import (
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	// Работа с пользователями
-
 	server.POST("/authorization", func(c *gin.Context) {
 		handlerUser.PostHandleAuthorizationUser(c, db)
 	})

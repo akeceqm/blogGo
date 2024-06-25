@@ -47,26 +47,4 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Failed to load user data", error);
             });
     }
-
-    const btnsEditPost = document.querySelectorAll('.BtnEditPost');
-    const btnCloseEdit = document.getElementById('BtnCloseEdit')
-    const popUpEdit = document.getElementById('Pop_upEdit')
-
-    btnCloseEdit.onclick = () => {
-        popUpEdit.classList.remove('active')
-    }
-    btnsEditPost.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            popUpEdit.classList.add('active')
-            const TitleInput = document.getElementById('TitleInputEdit')
-            const TextInput = document.getElementById('TextInputEdit')
-            const currentUrl = window.location.href;
-            const url = new URL(currentUrl);
-            const userId = url.searchParams.get('userId');
-            let TitleAndText = btn.title.split('|')
-            TitleInput.value = TitleAndText[0]
-            TextInput.value = TitleAndText[1]
-        });
-    });
-
 });

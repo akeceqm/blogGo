@@ -7,13 +7,14 @@ if (btnLoadPosts) {
 }
 
 let UpdatePosts = 1;
+const currentUrl = window.location.href;
+const url = new URL(currentUrl);
+const userId = url.searchParams.get('userId');
 
 function fetchData() {
     var xhr = new XMLHttpRequest();
 
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const userId = url.searchParams.get('userId');
+
     console.log(userId);
 
     xhr.open('GET', `/posts/order/${UpdatePosts}/${userId}`, true);
@@ -44,7 +45,6 @@ function updatePage(data) {
         clonedContainer.querySelector('.title').textContent = item.Title; // Используем данные из item
         clonedContainer.querySelector('.content').textContent = item.Text; // Используем данные из item
         clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count; // Используем данные из item
-
         dataContainer.appendChild(clonedContainer);
     });
     CheckLoadPosts(function(success) {
@@ -58,19 +58,18 @@ function updatePage(data) {
 
 function CheckLoadPosts(callback) {
     var xhr = new XMLHttpRequest();
-
-    xhr.open('GET', `/posts/order/${UpdatePosts+1}`, true);
-
+    xhr.open('GET', `/posts/order/${UpdatePosts+1}/${userId}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-
                 if (data === null) {
                     callback(false);
+                    console.log("запрос не удался или данные равны null");
                     return;
                 }
                 callback(true);
+                console.log("посты загружены");
             } else {
                 callback(false);
             }
@@ -87,6 +86,7 @@ window.onload = function() {
             const MainBtnLoadPosts = document.getElementById('Main__BtnLoadPosts');
             const parent = MainBtnLoadPosts.parentNode;
             const removedButton = parent.removeChild(MainBtnLoadPosts);
+            console.log("больше не постов");
         }
     });
 };

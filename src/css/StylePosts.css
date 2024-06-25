@@ -67,6 +67,14 @@ button {
     margin-right: 10px;
 }
 
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #555;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 .info {
     display: flex;
     flex-direction: column;
@@ -87,10 +95,12 @@ button {
     color: #f7a600;
     font-size: 18px;
     font-weight: bold;
+    white-space: pre-line;
 }
 
 .content {
     font-size: 16px;
+    white-space: pre-line;
 }
 
 .footer {

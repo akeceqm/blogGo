@@ -91,10 +91,10 @@ func GetPostByBetweenDate(startDate, endDate time.Time, db *sqlx.DB) ([]models.P
 	return post, nil
 }
 
-func UpdatePost(id string, title, text string, db *sqlx.DB) error {
+func UpdatePost(title, text, PostId string, db *sqlx.DB) error {
 	var postDB models.Post
 
-	err := db.Get(&postDB, "SELECT * FROM public.post WHERE id = $1", id)
+	err := db.Get(&postDB, "SELECT * FROM public.post WHERE id = $1", PostId)
 	if err != nil {
 		return err
 	}
@@ -105,7 +105,7 @@ func UpdatePost(id string, title, text string, db *sqlx.DB) error {
 		text = postDB.Text
 	}
 
-	_, err = db.Exec("UPDATE public.post SET title = $1, text = $2 WHERE id = $3", title, text, id)
+	_, err = db.Exec("UPDATE public.post SET title = $1, text = $2 WHERE id = $3", title, text, PostId)
 	if err != nil {
 		return err
 	}
