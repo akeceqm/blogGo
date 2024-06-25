@@ -88,10 +88,17 @@ form {
 }
 
 .post__options {
+  opacity: 0;
+  visibility: hidden;
   position: relative;
   cursor: pointer;
   margin-left: auto;
   margin-top: -30px;
   margin-right: -10px;
+  transition: opacity .5s ease-in-out, visibility .5s ease-in-out;
 }
 
+.mainPost__inner:hover .post__options {
+  opacity: 1;
+  visibility: visible;
+}
