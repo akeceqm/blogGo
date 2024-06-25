@@ -29,6 +29,8 @@ type FullPost struct {
 	DateCreatedFormat string
 	AuthorName        string `db:"nick_name" json:"nick_name"`
 	AuthorId          string `db:"author_id" json:"author_id"`
+	Avatar            string
+	AvatarValid       bool
 	Comments          []FullComment
 	CommentsCount     int `db:"comment_count" json:"comment_count"`
 }

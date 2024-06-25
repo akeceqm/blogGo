@@ -91,7 +91,11 @@
               <div id="mainPost__inner" class="mainPost__inner">
                 <div class="post">
                   <div class="header">
-                    <div class="post__avatar"></div>
+                    {{if .AvatarValid }}
+                        <div><img class="post__avatar" src="{{ .Avatar }}"/></div>
+                    {{else}}
+                        <div><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
+                    {{end}}
                     <div class="info">
                       <div class="username">{{ .AuthorName }}</div>
                       <div class="timestamp">{{ .DateCreatedFormat }}</div>
@@ -205,7 +209,6 @@
 
 <script src="/assets/js/ScriptManagementPostUser.js"></script>
 <script src="/assets/js/profileUser.js"></script>
-<script src="/assets/js/ScriptLoadUserPosts.js"></script>
 
 </body>
 </html>

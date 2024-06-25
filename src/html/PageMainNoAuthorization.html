@@ -40,7 +40,11 @@
                     <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
                             <div class="header">
-                                <div class="avatar"></div>
+                                {{if .AvatarValid }}
+                                    <div class="avatar"><img class="post__avatar" src="{{ .Avatar }}"/></div>
+                                {{else}}
+                                    <div class="avatar"><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
+                                {{end}}
                                 <div class="info">
                                     <div class="username">{{ .AuthorName }}</div>
                                     <div class="timestamp">{{ .DateCreatedFormat }}</div>

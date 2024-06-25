@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/assets/css/StylePostComments.css" />
+    <link rel="stylesheet" href="/assets/css/StylePosts.css" />
     <title>xxx</title>
 
 </head>
@@ -42,14 +43,18 @@
         {{if .posts.Comments}}
             {{ range .posts.Comments }}
                 <div class="comment">
-                    <div class="info">
-                        <div class="username">{{ .AuthorName }}</div>
-                        <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                    <div class="header">
+                        <div class="avatar"></div>
+                        <div class="info">
+                            <div style="color: #f7a600" class="username">{{ .AuthorName }}</div>
+                            <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                        </div>
                     </div>
-                    <div>
+                    <div style="display: inline; white-space: pre-line; word-wrap: break-word;">
                         {{ .Text }}
                     </div>
                 </div>
+                    <div style="background-color: #545454; height: 1px"></div>
             {{end}}
 
             {{else}}

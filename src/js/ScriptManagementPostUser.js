@@ -2,16 +2,9 @@ const openPopUp = document.getElementById('BtnCreateNewPost')
 const closePopUp = document.getElementById('BtnClose')
 const popUp = document.getElementById('Pop_up')
 const BtnCreatePost = document.getElementById('BtnSucces')
-
 const BtnEditPost = document.getElementById('BtnSuccesEdit')
-const btnsEditPost = document.querySelectorAll('.BtnEditPost');
-const btnCloseEdit = document.getElementById('BtnCloseEdit')
-const popUpEdit = document.getElementById('Pop_upEdit')
-
 const BtnDelPost = document.getElementById('BtnSuccesDel')
-const btnsDelPost = document.querySelectorAll('.BtnDelPost');
-const btnCloseDel = document.getElementById('BtnCloseDel')
-const popUpDel = document.getElementById('Pop_upDel')
+AddEditAndDelete()
 
 openPopUp.onclick = () => {
     popUp.classList.add('active')
@@ -22,41 +15,51 @@ closePopUp.addEventListener('click', () => {
     document.removeEventListener("keydown", handleEnterPress)
 })
 
-btnCloseEdit.onclick = () => {
-    popUpEdit.classList.remove('active')
-    document.removeEventListener("keydown", handleEnterPressEdit)
-}
-btnsEditPost.forEach((btn) => {
-    btn.addEventListener('click', () => {
-        popUpEdit.classList.add('active')
-        document.addEventListener("keydown", handleEnterPressEdit)
+function AddEditAndDelete() {
+    const btnsEditPost = document.querySelectorAll('.BtnEditPost');
+    const btnCloseEdit = document.getElementById('BtnCloseEdit')
+    const popUpEdit = document.getElementById('Pop_upEdit')
 
-        const TitleInput = document.getElementById('TitleInputEdit')
-        const TextInput = document.getElementById('TextInputEdit')
-        let TitleAndText = btn.title.split('|')
-        TitleInput.value = TitleAndText[0]
-        TextInput.value = TitleAndText[1]
-        TitleInput.title = btn.id.replace('BtnEdit_', '')
+    btnCloseEdit.onclick = () => {
+        popUpEdit.classList.remove('active')
+        document.removeEventListener("keydown", handleEnterPressEdit)
+    }
+    btnsEditPost.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            popUpEdit.classList.add('active')
+            document.addEventListener("keydown", handleEnterPressEdit)
+
+            const TitleInput = document.getElementById('TitleInputEdit')
+            const TextInput = document.getElementById('TextInputEdit')
+            let TitleAndText = btn.title.split('|')
+            TitleInput.value = TitleAndText[0]
+            TextInput.value = TitleAndText[1]
+            TitleInput.title = btn.id.replace('BtnEdit_', '')
+        });
     });
-});
 
-btnCloseDel.onclick = () => {
-    popUpDel.classList.remove('active')
-    document.removeEventListener("keydown", handleEnterPressDel)
-}
-btnsDelPost.forEach((btn) => {
-    btn.addEventListener('click', () => {
-        popUpDel.classList.add('active')
-        document.addEventListener("keydown", handleEnterPressDel)
+    const btnsDelPost = document.querySelectorAll('.BtnDelPost');
+    const btnCloseDel = document.getElementById('BtnCloseDel')
+    const popUpDel = document.getElementById('Pop_upDel')
 
-        const TitleInput = document.getElementById('TitleInputDel')
-        const TextInput = document.getElementById('TextInputDel')
-        let TitleAndText = btn.title.split('|')
-        TitleInput.value = TitleAndText[0]
-        TextInput.value = TitleAndText[1]
-        TitleInput.title = btn.id.replace('BtnDel_', '')
+    btnCloseDel.onclick = () => {
+        popUpDel.classList.remove('active')
+        document.removeEventListener("keydown", handleEnterPressDel)
+    }
+    btnsDelPost.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            popUpDel.classList.add('active')
+            document.addEventListener("keydown", handleEnterPressDel)
+
+            const TitleInput = document.getElementById('TitleInputDel')
+            const TextInput = document.getElementById('TextInputDel')
+            let TitleAndText = btn.title.split('|')
+            TitleInput.value = TitleAndText[0]
+            TextInput.value = TitleAndText[1]
+            TitleInput.title = btn.id.replace('BtnDel_', '')
+        });
     });
-});
+}
 
 function handleEnterPress(event) {
     if (event.key === 'Enter') {
@@ -187,3 +190,106 @@ function deletePost() {
     TitleInputDel.value = ""
     TextInputDel.value = ""
 }
+
+
+const btnLoadPosts = document.getElementById("BtnLoadPosts");
+if (btnLoadPosts) {
+    btnLoadPosts.onclick = function () {
+        UpdatePosts++;
+        fetchData();
+    };
+}
+
+let UpdatePosts = 2;
+const currentUrl = window.location.href;
+const url = new URL(currentUrl);
+const userId = url.searchParams.get('userId');
+
+function fetchData() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', `/posts/order/${UpdatePosts}/${userId}`, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            updatePage(data);
+        }
+    };
+    xhr.send();
+}
+
+function updatePage(data) {
+    var templateContainer = document.getElementById('mainPost__inner');
+    var dataContainer = document.getElementById('MainPosts');
+    templateContainer.removeAttribute('id');
+
+    const MainBtnLoadPosts = document.getElementById('Main__BtnLoadPosts');
+    const parent = MainBtnLoadPosts.parentNode;
+    const removedButton = parent.removeChild(MainBtnLoadPosts);
+
+    data.forEach(function(item) {
+        var clonedContainer = templateContainer.cloneNode(true);
+
+        clonedContainer.querySelector('.username').textContent = item.nick_name;
+        if (item.Avatar.length <= 6) {
+            clonedContainer.querySelector('.post__avatar').src = "/assets/img/avatar.svg";
+        } else {
+            clonedContainer.querySelector('.post__avatar').src = item.Avatar;
+        }
+        clonedContainer.querySelector('.timestamp').textContent = item.DateCreatedFormat;
+        clonedContainer.querySelector('.title').textContent = item.Title;
+        clonedContainer.querySelector('.content').textContent = item.Text;
+        clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count;
+
+        clonedContainer.querySelector('.BtnEditPost').title = item.Title + "|" + item.Text;
+        clonedContainer.querySelector('.BtnDelPost').title = item.Title + "|" + item.Text;
+        clonedContainer.querySelector('.BtnEditPost').id = 'BtnEdit_' + item.Id;
+        clonedContainer.querySelector('.BtnDelPost').id = 'BtnDel_' + item.Id;
+
+        dataContainer.appendChild(clonedContainer);
+    });
+    AddEditAndDelete()
+    CheckLoadPosts(function(success) {
+        if (!success) {
+            console.log('Запрос не удался или данные равны null');
+        } else {
+            dataContainer.appendChild(MainBtnLoadPosts)
+        }
+    });
+}
+
+function CheckLoadPosts(callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `/posts/order/${UpdatePosts+1}/${userId}`, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                if (data === null) {
+                    callback(false);
+                    console.log("запрос не удался или данные равны null");
+                    return;
+                }
+                callback(true);
+                console.log("посты загружены");
+            } else {
+                callback(false);
+            }
+        }
+    };
+    xhr.send();
+}
+
+window.onload = function() {
+    UpdatePosts = 1;
+    console.log("Переменная UpdatePosts инициализирована");
+    CheckLoadPosts(function(success) {
+        if (!success) {
+            const MainBtnLoadPosts = document.getElementById('Main__BtnLoadPosts');
+            const parent = MainBtnLoadPosts.parentNode;
+            const removedButton = parent.removeChild(MainBtnLoadPosts);
+            console.log("больше не постов");
+        }
+    });
+};

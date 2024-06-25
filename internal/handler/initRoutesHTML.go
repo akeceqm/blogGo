@@ -10,6 +10,7 @@ import (
 	"post/internal/handler/handlerPost"
 	"post/internal/handler/handlerUser"
 	"post/internal/services"
+	"strings"
 )
 
 func InitRoutesHTML(server *gin.Engine, db *sqlx.DB) {
@@ -109,6 +110,8 @@ func handlerIndexNoAuthorization(c *gin.Context, db *sqlx.DB) {
 			AuthorName:        post[i].AuthorName,
 			Comments:          []models.FullComment{},
 			CommentsCount:     len(comments),
+			Avatar:            post[i].Avatar,
+			AvatarValid:       len(post[i].Avatar) > 8,
 		})
 	}
 	c.HTML(200, "PageMainNoAuthorization.html", gin.H{"posts": fullPosts})
@@ -142,6 +145,8 @@ func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 			AuthorName:        post[i].AuthorName,
 			Comments:          []models.FullComment{},
 			CommentsCount:     len(comments),
+			Avatar:            post[i].Avatar,
+			AvatarValid:       len(post[i].Avatar) > 8,
 		})
 	}
 
@@ -183,12 +188,14 @@ func handlerIndexProfileUser(c *gin.Context, db *sqlx.DB) {
 		fullPosts = append(fullPosts, models.FullPost{
 			Id:                post[i].Id,
 			Title:             post[i].Title,
-			Text:              post[i].Text,
+			Text:              strings.TrimSpace(post[i].Text),
 			AuthorId:          post[i].AuthorId,
 			DateCreatedFormat: post[i].DateCreated.Format("2006-01-02 15:04:05"),
 			AuthorName:        post[i].AuthorName,
 			Comments:          []models.FullComment{},
 			CommentsCount:     len(comments),
+			Avatar:            post[i].Avatar,
+			AvatarValid:       len(post[i].Avatar) >= 8,
 		})
 	}
 
