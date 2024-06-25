@@ -45,14 +45,12 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 	log.Printf("Updated user: %s, %s", updatedUser.NickName, updatedUser.Description)
 
 	if updatedUser.Avatar != "" {
-		// Декодируем base64 строку в изображение
+		// Decode base64 string to image
 		avatarData, err := base64.StdEncoding.DecodeString(updatedUser.Avatar)
 		if err != nil {
-			// Логируем ошибку, но не возвращаем ее клиенту
 			log.Printf("Failed to decode base64 avatar: %v", err)
-			// Продолжаем выполнение, используя текущий URL аватара
 		} else {
-			// Сохраняем изображение в файл (например, в ./assets/img/ с уникальным именем)
+			// Save image to file (e.g., in ./data/img/ with a unique name)
 			avatarPath := SaveAvatarBase64(avatarData, userId)
 			if avatarPath == "" {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save avatar"})
@@ -60,12 +58,12 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 				return
 			}
 
-			// Обновляем путь аватара пользователя в структуре
+			// Update user's avatar path in the structure
 			updatedUser.Avatar = avatarPath
 		}
 	}
 
-	// Обновление пользователя в базе данных с новым путем аватара
+	// Update user in the database with new avatar path
 	updatedUser, err := services.UpdateUser(db, userId, updatedUser.NickName, updatedUser.Description, updatedUser.Avatar)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user", "details": err.Error()})
@@ -75,13 +73,13 @@ func PUTHandleUser(c *gin.Context, db *sqlx.DB) {
 
 	log.Println("Updated user avatar:", updatedUser.Avatar)
 
-	// Возвращаем обновленного пользователя в виде JSON
+	// Return updated user as JSON
 	c.JSON(http.StatusOK, updatedUser)
 }
 
 // Функция для сохранения файла аватара из base64 строки и возврата его пути
 func SaveAvatarBase64(data []byte, userId string) string {
-	uploadDir := "./src/img/"
+	uploadDir := "./data/img/" // Ensure the directory exists
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 		os.MkdirAll(uploadDir, 0755)
 	}
@@ -95,5 +93,5 @@ func SaveAvatarBase64(data []byte, userId string) string {
 	}
 
 	log.Printf("Avatar saved to %s", filePath)
-	return filepath.ToSlash(filepath.Join("/assets/img/", filename))
+	return filepath.ToSlash(filePath) // Return the correct path for the web server
 }

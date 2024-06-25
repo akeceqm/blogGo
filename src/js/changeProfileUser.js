@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentAvatar = '';
 
-    // Функция для обновления профиля пользователя
     function updateProfile(data) {
         fetch(`/changeProfile/${userId}`, {
             method: 'PUT',
@@ -40,11 +39,9 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Failed to send data:', error.message);
-                // Обработка ошибок отправки данных, например, показ сообщения пользователю
             });
     }
 
-    // Загрузка данных пользователя при загрузке страницы
     fetch(`/api/user/${userId}`)
         .then(response => {
             if (!response.ok) {
@@ -59,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 avatarImg.src = data.avatar;
                 avatarImg.alt = 'Avatar';
-                currentAvatar = data.avatar; // Сохраняем текущий URL аватара
+                currentAvatar = data.avatar;
             }
 
             avatarImg.onerror = function() {
@@ -75,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Failed to load user data', error);
         });
 
-    // Обработка изменений в поле выбора аватара
     avatarInput.addEventListener('change', function() {
         const avatarFile = avatarInput.files[0];
         if (!avatarFile) {
@@ -90,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(avatarFile);
     });
 
-    // Обработка клика по кнопке обновления профиля
     updateButton.addEventListener('click', function() {
         console.log('Update button clicked');
         const newName = nameInput.value.trim();
@@ -105,20 +100,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (avatarFile) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const avatarBase64 = e.target.result.split(',')[1]; // Получаем только base64 часть
+                const avatarBase64 = e.target.result.split(',')[1];
                 data.avatar = avatarBase64;
 
                 updateProfile(data);
             };
             reader.readAsDataURL(avatarFile);
         } else {
-            // Если аватар не выбран заново и текущий URL аватара есть, отправляем его
             if (currentAvatar) {
                 data.avatar = currentAvatar;
-                updateProfile(data); // Отправляем данные на обновление профиля
+                updateProfile(data);
             } else {
-                // Если аватар не выбран и текущего URL аватара нет, обновляем без аватара
-                updateProfile(data); // Отправляем данные на обновление профиля
+                updateProfile(data);
             }
         }
 
