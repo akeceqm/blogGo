@@ -56,6 +56,9 @@
         <li class="menu__item">
           <a href="#" class="menu__link">Друзья</a>
         </li>
+        <li class="menu__item">
+          <a  class="menu__link" id="logOut"><span color="#ed0505">Выйти из аккаунта</span></a>
+        </li>
       </ul>
     </nav>
     <form>
@@ -97,7 +100,9 @@
                       <div class="timestamp">{{ .DateCreatedFormat }}</div>
                     </div>
                     <div class="post__options">
-                      <img src="/assets/img/edit_pen.svg"/>
+                      <button style="cursor: pointer" class="BtnEditPost" title="{{.Title}}|{{.Text}}" id="BtnEdit_{{.Id}}">
+                        <img style="cursor: pointer" src="/assets/img/edit_pen.svg"/>
+                      </button>
                     </div>
                   </div>
                   <div class="title">{{ .Title }}</div>
@@ -147,6 +152,28 @@
         </div>
         <div class="BtnSucces">
           <button id="BtnSucces">
+            <p>Создать пост</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="Pop_upEdit" class="pop_up">
+  <div class="pop_up_container">
+    <div class="pop_up_body">
+      <p>Редактирование поста</p>
+      <textarea class="TitleInput" id="TitleInputEdit" rows="2" placeholder="Загаловок"></textarea>
+      <textarea class="TextInput" id="TextInputEdit" rows="2" placeholder="Текст поста..."></textarea>
+      <div class="pop_up__Btn">
+        <div class="BtnClose">
+          <button id="BtnCloseEdit">
+            <p>Отмена</p>
+          </button>
+        </div>
+        <div class="BtnSucces">
+          <button id="BtnSuccesEdit">
             <p>Создать пост</p>
           </button>
         </div>
@@ -216,8 +243,9 @@
     TextInput.value = ""
   }
 </script>
+
+<script src="/assets/js/logOutProfile.js"></script>
 <script src="/assets/js/profileUser.js"></script>
-<script src="/assets/js/ScriptCreateNewPost.js"></script>
 <script src="/assets/js/ScriptLoadUserPosts.js"></script>
 
 </body>
