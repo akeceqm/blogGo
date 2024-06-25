@@ -108,7 +108,7 @@ func PUTHandlePost(c *gin.Context, db *sqlx.DB) {
 		return
 	}
 
-	err := services.UpdatePost(updatedPost.Id, updatedPost.Title, updatedPost.Text, db)
+	err := services.UpdatePost(updatedPost.Title, updatedPost.Text, updatedPost.Id, db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
