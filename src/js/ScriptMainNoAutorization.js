@@ -34,11 +34,18 @@ function updatePage(data) {
     data.forEach(function(item) {
         var clonedContainer = templateContainer.cloneNode(true);
 
-        clonedContainer.querySelector('.username').textContent = item.nick_name; // Используем данные из item
-        clonedContainer.querySelector('.timestamp').textContent = item.DateCreatedFormat; // Используем данные из item
-        clonedContainer.querySelector('.title').textContent = item.Title; // Используем данные из item
-        clonedContainer.querySelector('.content').textContent = item.Text; // Используем данные из item
-        clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count; // Используем данные из item
+        clonedContainer.querySelector('.username a').textContent = item.nick_name;
+        clonedContainer.querySelector('.username a').href = `/profileUser?userId=${item.author_id}`;
+        if (item.Avatar.length < 6) {
+            clonedContainer.querySelector('.post__avatar').src = "/assets/img/avatar.svg";
+        } else {
+            clonedContainer.querySelector('.post__avatar').src = item.Avatar;
+        }
+        clonedContainer.querySelector('.timestamp').textContent = item.DateCreatedFormat;
+        clonedContainer.querySelector('.title').textContent = item.Title;
+        clonedContainer.querySelector('.content').textContent = item.Text;
+        clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count;
+        clonedContainer.querySelector('.commentCount').href = `/h/post/${item.Id}/comments`;
 
         dataContainer.appendChild(clonedContainer);
     });
