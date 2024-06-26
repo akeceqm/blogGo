@@ -59,6 +59,19 @@ function AddEditAndDelete() {
             TitleInput.title = btn.id.replace('BtnDel_', '')
         });
     });
+
+    const btnsSharePost = document.querySelectorAll('.BtnSharePost');
+    btnsSharePost.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            let PostId = btn.title
+            const currentUrl = window.location.href;
+            const url = new URL(currentUrl);
+            const baseUrl = `${url.protocol}//${url.hostname}${url.port ? `:${url.port}` : ''}`;
+
+            navigator.clipboard.writeText(`${baseUrl}/h/post/${PostId}/comments`);
+            alert('Ссылка скопирована в буфер обмена');
+        });
+    });
 }
 
 function handleEnterPress(event) {
@@ -231,7 +244,8 @@ function updatePage(data) {
     data.forEach(function(item) {
         var clonedContainer = templateContainer.cloneNode(true);
 
-        clonedContainer.querySelector('.username').textContent = item.nick_name;
+        clonedContainer.querySelector('.username a').textContent = item.nick_name;
+        clonedContainer.querySelector('.username a').href = `/profileUser?userId=${item.author_id}`;
         if (item.Avatar.length <= 6) {
             clonedContainer.querySelector('.post__avatar').src = "/assets/img/avatar.svg";
         } else {
@@ -241,11 +255,21 @@ function updatePage(data) {
         clonedContainer.querySelector('.title').textContent = item.Title;
         clonedContainer.querySelector('.content').textContent = item.Text;
         clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count;
+        clonedContainer.querySelector('.commentCount').href = `/h/post/${item.Id}/comments`;
 
-        clonedContainer.querySelector('.BtnEditPost').title = item.Title + "|" + item.Text;
-        clonedContainer.querySelector('.BtnDelPost').title = item.Title + "|" + item.Text;
-        clonedContainer.querySelector('.BtnEditPost').id = 'BtnEdit_' + item.Id;
-        clonedContainer.querySelector('.BtnDelPost').id = 'BtnDel_' + item.Id;
+        if (clonedContainer.querySelector('.BtnEditPost') !== null) {
+            clonedContainer.querySelector('.BtnEditPost').title = item.Title + "|" + item.Text;
+            clonedContainer.querySelector('.BtnEditPost').id = 'BtnEdit_' + item.Id;
+        }
+
+        if (clonedContainer.querySelector('.BtnDelPost') !== null) {
+            clonedContainer.querySelector('.BtnDelPost').title = item.Title + "|" + item.Text;
+            clonedContainer.querySelector('.BtnDelPost').id = 'BtnDel_' + item.Id;
+        }
+        if (clonedContainer.querySelector('.BtnSharePost') !== null) {
+            clonedContainer.querySelector('.BtnSharePost').title = item.Id;
+            clonedContainer.querySelector('.BtnSharePost').id = 'BtnShare_' + item.Id;
+        }
 
         dataContainer.appendChild(clonedContainer);
     });

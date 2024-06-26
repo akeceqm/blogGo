@@ -2,37 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/assets/css/StylePostComments.css" />
     <link rel="stylesheet" href="/assets/css/StylePosts.css" />
+    <link rel="stylesheet" href="/assets/css/StylePostComments.css" />
     <title>xxx</title>
 
 </head>
 <body>
-<div class="mainPost">
-    <div class="container">
-        <div class="post">
-            <div class="header">
-                <div class="avatar"></div>
-                <div class="info">
-                    <div class="username">{{ .posts.AuthorName }}</div>
-                    <div class="timestamp">{{ .posts.DateCreatedFormat }}</div>
+<div style="height: 100vh">
+    <a style="
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #cecece;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;" href="/"><= Главная</a>
+    <div style="margin-top: 50px;" class="mainPost">
+        <div class="container">
+            <div class="post">
+                <div class="header">
+                    <div class="avatar"></div>
+                    <div class="info">
+                        <div class="username">{{ .posts.AuthorName }}</div>
+                        <div class="timestamp">{{ .posts.DateCreatedFormat }}</div>
+                    </div>
+                </div>
+                <div class="title">{{ .posts.Title }}</div>
+                <div class="content">
+                    {{ .posts.Text }}
                 </div>
             </div>
-            <div class="title">{{ .posts.Title }}</div>
-            <div class="content">
-                {{ .posts.Text }}
-            </div>
-        </div>
-        <div class="footer">
-{{/*            <div class="likes">*/}}
-{{/*                <button>*/}}
-{{/*                    <p>Лайки: 100k</p>*/}}
-{{/*                </button>*/}}
-{{/*            </div>*/}}
-            <div class="comments">
-                <button>
-                    <p>Комментарии: {{ .posts.CommentsCount }}</p>
-                </button>
+            <div class="footer">
+                {{/*            <div class="likes">*/}}
+                {{/*                <button>*/}}
+                {{/*                    <p>Лайки: 100k</p>*/}}
+                {{/*                </button>*/}}
+                {{/*            </div>*/}}
+                <div class="comments">
+                    <button>
+                        <p>Комментарии: {{ .posts.CommentsCount }}</p>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

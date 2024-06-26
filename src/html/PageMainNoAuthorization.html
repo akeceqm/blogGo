@@ -46,7 +46,7 @@
                                     <div class="avatar"><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
                                 {{end}}
                                 <div class="info">
-                                    <div class="username">{{ .AuthorName }}</div>
+                                    <div title="{{.AuthorId}}" class="username"><a href="http://localhost:8080/profileUser?userId={{.AuthorId}}">{{ .AuthorName }}</a></div>
                                     <div class="timestamp">{{ .DateCreatedFormat }}</div>
                                 </div>
                             </div>

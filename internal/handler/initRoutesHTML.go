@@ -166,10 +166,19 @@ func handlerIndexAuthorization(c *gin.Context, db *sqlx.DB) {
 }
 
 func handlerIndexProfileUser(c *gin.Context, db *sqlx.DB) {
+	var UserAuthorization bool = false
+
 	userID, exists := c.Get("userID")
 	if !exists || userID == nil {
-		log.Println("Пользователь не авторизован или сессия истекла fgdfg")
-		userID = ""
+		log.Println("Пользователь не авторизован или сессия истекла")
+		userID = strings.Replace(c.Request.URL.String(), "/profileUser?userId=", "", 1)
+	} else {
+		if userID.(string) == strings.Replace(c.Request.URL.String(), "/profileUser?userId=", "", 1) {
+			UserAuthorization = true
+		} else {
+			UserAuthorization = false
+			userID = strings.Replace(c.Request.URL.String(), "/profileUser?userId=", "", 1)
+		}
 	}
 
 	post, err := services.GetPostFullByUserId(db, userID.(string))
@@ -199,7 +208,7 @@ func handlerIndexProfileUser(c *gin.Context, db *sqlx.DB) {
 		})
 	}
 
-	c.HTML(200, "profileUser.html", gin.H{"posts": fullPosts})
+	c.HTML(200, "profileUser.html", gin.H{"posts": fullPosts, "UserAuthorization": UserAuthorization})
 }
 
 func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
