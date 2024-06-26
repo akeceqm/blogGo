@@ -8,6 +8,7 @@ import (
 	"post/internal/handler/handlerPost"
 	"post/internal/handler/handlerUser"
 	"post/internal/handler/session"
+	"post/internal/services"
 )
 
 func InitRoutes(server *gin.Engine, db *sqlx.DB) {
@@ -36,6 +37,15 @@ func InitRoutes(server *gin.Engine, db *sqlx.DB) {
 	// Работа с сессиями (cookies)
 	server.GET("/session", func(c *gin.Context) {
 		session.CookiesHandler(c.Writer, c.Request)
+	})
+
+	server.DELETE("/session/delete/:userId", func(c *gin.Context) {
+		userId := c.Param("userId")
+		if err := services.DeleteSession(db, userId); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "Session deleted"})
 	})
 
 	// Запросы ПОСТОВ

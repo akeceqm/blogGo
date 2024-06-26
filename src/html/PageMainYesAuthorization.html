@@ -1,90 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/assets/css/StylePosts.css">
-    <link rel="stylesheet" href="/assets/css/StyleMainYesAutorization.css">
-    <link rel="stylesheet" href="assets/css/styleMenu.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/assets/css/StylePosts.css" />
+    <link rel="stylesheet" href="/assets/css/StyleMainYesAutorization.css" />
+    <link rel="stylesheet" href="assets/css/styleMenu.css" />
     <title>SeverGoBlog</title>
-</head>
-<body>
-<div class="container">
-    <header class="header">
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
         <div class="container">
-            <div class="header__inner">
-                <div class="logo__inner">
-                    <a class="logo" href="#">
-                        <img class="logo__img" src="/assets/img/logo.svg" alt="logo" />
-                    </a>
-                    <h4 class="logo__text"><a href="/profile">{{ .userName.NickName }}</a></h4>
-                </div>
-                <nav class="menu">
-                    <ul class="menu__list">
-                        <li class="menu__item">
-                            <a href="/" class="menu__link">Лента</a>
-                        </li>
-                        <li class="menu__item">
-                            <a href="#" class="menu__link">Месседжер</a>
-                        </li>
-                        <li class="menu__item">
-                            <a href="#" class="menu__link">Друзья</a>
-                        </li>
-                    </ul>
-                </nav>
+          <div class="header__inner">
+            <div class="logo__inner">
+              <a class="logo" href="#">
+                <img class="logo__img" src="/assets/img/logo.svg" alt="logo" />
+              </a>
+              <h4 class="logo__text">
+                <a href="/profile">{{ .userName.NickName }}</a>
+              </h4>
             </div>
+            <nav class="menu">
+              <ul class="menu__list">
+                <li class="menu__item">
+                  <a href="/" class="menu__link">Лента</a>
+                </li>
+                <li class="menu__item">
+                  <a href="#" class="menu__link">Месседжер</a>
+                </li>
+                <li class="menu__item">
+                  <a href="#" class="menu__link">Друзья</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
-    </header>
+      </header>
 
-    <div class="posts">
+      <div class="posts">
         <div class="posts__inner">
-            <div id="MainPosts" class="mainPost">
-                {{if .posts}}
-                {{range .posts}}
-                    <div id="mainPost__inner" class="mainPost__inner">
-                        <div class="post">
-                            <div class="header">
-                                {{if .AvatarValid }}
-                                    <div class="avatar"><img class="post__avatar" src="{{ .Avatar }}"/></div>
-                                {{else}}
-                                    <div class="avatar"><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
-                                {{end}}
-                                <div class="info">
-                                    <div title="{{.AuthorId}}" class="username"><a href="http://localhost:8080/profileUser?userId={{.AuthorId}}">{{ .AuthorName }}</a></div>
-                                    <div class="timestamp">{{ .DateCreatedFormat }}</div>
-                                </div>
-                            </div>
-                            <div class="title">{{ .Title }}</div>
-                            <div class="content">
-                                {{ .Text}}
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <div class="comments">
-                                <a class="commentCount" href="/h/post/{{ .Id }}/comments">
-                                    Комментарии: {{ .CommentsCount }}
-                                </a>
-                            </div>
-                        </div>
+          <div id="MainPosts" class="mainPost">
+            {{if .posts}} {{range .posts}}
+            <div id="mainPost__inner" class="mainPost__inner">
+              <div class="post">
+                <div class="header">
+                  {{if .AvatarValid }}
+                  <div class="avatar">
+                    <img class="post__avatar" src="{{ .Avatar }}" />
+                  </div>
+                  {{else}}
+                  <div class="avatar">
+                    <img class="post__avatar" src="/assets/img/avatar.svg" />
+                  </div>
+                  {{end}}
+                  <div class="info">
+                    <div title="{{.AuthorId}}" class="username">
+                      <a
+                        href="http://localhost:8080/profileUser?userId={{.AuthorId}}"
+                        >{{ .AuthorName }}</a
+                      >
                     </div>
-                {{end}}
-                <div id="Main__BtnLoadPosts" class="btnLoadPosts" >
-                    <button id="BtnLoadPosts">
-                        <a style="font-size: 20px">Загрузить еще</a>
+                    <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                  </div>
+                  <div class="post__options">
+                    <button
+                      style="cursor: pointer"
+                      class="BtnSharePost"
+                      title="{{.Id}}"
+                      id="BtnShare_{{.Id}}"
+                    >
+                      <img
+                        style="cursor: pointer"
+                        src="/assets/img/SharePost.svg"
+                      />
                     </button>
+                  </div>
                 </div>
-                {{else}}
-                <div class="btnLoadPosts" >
-                    <button>
-                        <a style="font-size: 20px">Нет постов</a>
-                    </button>
+                <div class="title">{{ .Title }}</div>
+                <div class="content">{{ .Text}}</div>
+              </div>
+              <div class="footer">
+                <div class="comments">
+                  <a class="commentCount" href="/h/post/{{ .Id }}/comments">
+                    Комментарии: {{ .CommentsCount }}
+                  </a>
                 </div>
-                {{end}}
+              </div>
             </div>
+            {{end}}
+            <div id="Main__BtnLoadPosts" class="btnLoadPosts">
+              <button id="BtnLoadPosts">
+                <a style="font-size: 20px">Загрузить еще</a>
+              </button>
+            </div>
+            {{else}}
+            <div class="btnLoadPosts">
+              <button>
+                <a style="font-size: 20px">Нет постов</a>
+              </button>
+            </div>
+            {{end}}
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<script src="/assets/js/ScriptMainYesAuthorization.js"></script>
-
-</body>
+    <script src="/assets/js/ScriptMainYesAuthorization.js"></script>
+  </body>
 </html>

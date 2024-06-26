@@ -60,3 +60,15 @@ if (button) {
         });
     }
 }
+
+
+const BtnSharePost = document.getElementById('BtnSharePost')
+BtnSharePost.onclick = () => {
+    let PostId = BtnSharePost.title
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const baseUrl = `${url.protocol}//${url.hostname}${url.port ? `:${url.port}` : ''}`;
+
+    navigator.clipboard.writeText(`${baseUrl}/h/post/${PostId}/comments`);
+    alert('Ссылка скопирована в буфер обмена');
+}

@@ -53,7 +53,7 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.header {
+.post__header {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -149,4 +149,20 @@ button {
 .btnLoadPosts:hover {
     background-color: #c08200;
     transition: all .2s;
+}
+
+.post__options {
+    opacity: 0;
+    visibility: hidden;
+    position: relative;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: -30px;
+    margin-right: -10px;
+    transition: opacity .5s ease-in-out, visibility .5s ease-in-out;
+}
+
+.mainPost__inner:hover .post__options {
+    opacity: 1;
+    visibility: visible;
 }
