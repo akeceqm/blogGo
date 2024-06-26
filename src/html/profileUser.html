@@ -10,7 +10,7 @@
   <title>Profile</title>
   <style>
     #registration-date {
-      color: #f7a600;
+      color: #9d9d9d;
     }
     a{
       color:inherit;
@@ -40,9 +40,6 @@
       margin-top: 1%;
     }
     }
-    .li-back:hover{
-    color: red;
-    }
   </style>
 </head>
 <body>
@@ -59,8 +56,8 @@
         <li class="menu__item">
           <a href="#" class="menu__link">Друзья</a>
         </li>
-        <li class="menu__item li-back">
-          <a  class="menu__link a-back" id="logOut">Выйти из аккаунта</a>
+        <li class="menu__item">
+          <a  class="menu__link">Выход из аккаунта</a>
         </li>
       </ul>
     </nav>
@@ -68,26 +65,36 @@
       <div class="main-info">
         <img class="avatar" alt="Avatar" />
         <div class="text-info">
-          <p id="name-user"></p>
+          <p style="color: #f7a600; margin-bottom: 10px" id="name-user"></p>
           <p id="date-user">
             Дата регистрации на сайте: <span id="registration-date"></span>
           </p>
           <article id="description-user"></article>
         </div>
       </div>
-      <div class="btn-container">
-   <button class="btn-edit" type="button">Изменить данные</button>
-      </div>
+      {{if .UserAuthorization}}
+        <div class="btn-container">
+          <button class="btn-edit" type="button">Изменить данные</button>
+        </div>
+      {{end}}
     </form>
   </div>
 
-  <div style="display: flex; margin-top: 20px">
+  <div style="display: flex; margin-top: 20px;">
 
+    {{if .UserAuthorization}}
     <div>
       <button class="btnLoadPosts" id="BtnCreateNewPost" style="cursor: pointer">
-        <a>Создать новый пост</a>
+        <a style="color: #1C1C1C">Создать новый пост</a>
       </button>
     </div>
+    {{else}}
+      <div>
+        <button class="btnLoadPosts" id="BtnCreateNewPost" style="cursor: pointer; opacity: 0; pointer-events: none;">
+          <a style="color: #1C1C1C">Создать новый пост</a>
+        </button>
+      </div>
+    {{end}}
 
     <div class="posts">
       <div class="posts__inner">
@@ -97,16 +104,31 @@
               <div id="mainPost__inner" class="mainPost__inner">
                 <div class="post">
                   <div class="header">
-                    <div class="post__avatar"></div>
+                    {{if .AvatarValid }}
+                        <div><img class="post__avatar" src="{{ .Avatar }}"/></div>
+                    {{else}}
+                        <div><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
+                    {{end}}
                     <div class="info">
-                      <div class="username">{{ .AuthorName }}</div>
+                      <div title="{{.AuthorId}}" class="username"><a href="http://localhost:8080/profileUser?userId={{.AuthorId}}">{{ .AuthorName }}</a></div>
                       <div class="timestamp">{{ .DateCreatedFormat }}</div>
                     </div>
-                    <div class="post__options">
-                      <button style="cursor: pointer" class="BtnEditPost" title="{{.Title}}|{{.Text}}" id="BtnEdit_{{.Id}}">
-                        <img style="cursor: pointer" src="/assets/img/edit_pen.svg"/>
-                      </button>
-                    </div>
+                    {{if $.UserAuthorization}}
+                      <div class="post__options">
+                        <button style="cursor: pointer" class="BtnEditPost" title="{{.Title}}|{{.Text}}" id="BtnEdit_{{.Id}}">
+                          <img style="cursor: pointer" src="/assets/img/edit_pen.svg"/>
+                        </button>
+                        <button style="cursor: pointer" class="BtnDelPost" title="{{.Title}}|{{.Text}}" id="BtnDel_{{.Id}}">
+                          <img style="cursor: pointer" src="/assets/img/DelTrash.svg"/>
+                        </button>
+                      </div>
+                    {{else}}
+                      <div class="post__options">
+                        <button style="cursor: pointer" class="BtnSharePost" title="{{.Id}}" id="BtnShare_{{.Id}}">
+                          <img style="cursor: pointer" src="/assets/img/SharePost.svg"/>
+                        </button>
+                      </div>
+                    {{end}}
                   </div>
                   <div class="title">{{ .Title }}</div>
                   <div class="content">
@@ -136,7 +158,6 @@
           {{end}}
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -177,7 +198,7 @@
         </div>
         <div class="BtnSucces">
           <button id="BtnSuccesEdit">
-            <p>Создать пост</p>
+            <p>Изменить пост</p>
           </button>
         </div>
       </div>
@@ -185,71 +206,30 @@
   </div>
 </div>
 
-<script>
-  const openPopUp = document.getElementById('BtnCreateNewPost')
-  const closePopUp = document.getElementById('BtnClose')
-  const popUp = document.getElementById('Pop_up')
-  const createPost = document.getElementById('BtnSucces')
-
-  openPopUp.onclick = () => {
-    popUp.classList.add('active')
-  }
-  closePopUp.addEventListener('click', () => {
-    popUp.classList.remove('active')
-  })
-
-  createPost.onclick = createNewPost
-  console.log("sdfgiomsyhdtjju")
-  function createNewPost() {
-    const TitleInput = document.getElementById('TitleInput')
-    const TextInput = document.getElementById('TextInput')
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const userId = url.searchParams.get('userId');
-
-    if (TitleInput.value == "") {
-      TitleInput.style.borderColor = '#ff0000'
-      return
-    }else {
-      TitleInput.style.borderColor = 'transparent'
-    }
-    if (TextInput.value == "") {
-      TextInput.style.borderColor = '#ff0000'
-      return;
-    }else {
-      TextInput.style.borderColor = 'transparent'
-    }
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", `/posts`);
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        let response = JSON.parse(xhr.responseText);
-        console.log(response);
-        location.reload();
-      } else {
-        console.error("Server error:", xhr.status, xhr.statusText);
-        location.reload();
-      }
-    };
-
-
-    let newPostData = JSON.stringify({
-      title: TitleInput.value,
-      text: TextInput.value,
-      author_id: userId,
-    });
-    console.log(newPostData);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(newPostData);
-    TitleInput.value = ""
-    TextInput.value = ""
-  }
-</script>
-
+<div id="Pop_upDel" class="pop_up">
+  <div class="pop_up_container">
+    <div class="pop_up_body">
+      <p style="color: #ff0000">Удаление поста</p>
+      <textarea class="TitleInput" id="TitleInputDel" rows="2" placeholder="Загаловок" readonly></textarea>
+      <textarea class="TextInput" id="TextInputDel" rows="2" placeholder="Текст поста..." readonly></textarea>
+      <div class="pop_up__Btn">
+        <div class="BtnClose">
+          <button id="BtnCloseDel">
+            <p>Отмена</p>
+          </button>
+        </div>
+        <div class="BtnSucces">
+          <button id="BtnSuccesDel">
+            <p>Удалить</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="/assets/js/logOutProfile.js"></script>
+<script src="/assets/js/ScriptManagementPostUser.js"></script>
 <script src="/assets/js/profileUser.js"></script>
-<script src="/assets/js/ScriptLoadUserPosts.js"></script>
 
 </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/css/StylePosts.css">
     <link rel="stylesheet" href="/assets/css/StyleMainYesAutorization.css">
     <link rel="stylesheet" href="assets/css/styleMenu.css">
     <title>SeverGoBlog</title>
@@ -42,9 +43,13 @@
                     <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
                             <div class="header">
-                                <div class="avatar"></div>
+                                {{if .AvatarValid }}
+                                    <div class="avatar"><img class="post__avatar" src="{{ .Avatar }}"/></div>
+                                {{else}}
+                                    <div class="avatar"><img class="post__avatar" src="/assets/img/avatar.svg"/></div>
+                                {{end}}
                                 <div class="info">
-                                    <div class="username">{{ .AuthorName }}</div>
+                                    <div title="{{.AuthorId}}" class="username"><a href="http://localhost:8080/profileUser?userId={{.AuthorId}}">{{ .AuthorName }}</a></div>
                                     <div class="timestamp">{{ .DateCreatedFormat }}</div>
                                 </div>
                             </div>

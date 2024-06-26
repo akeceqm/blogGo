@@ -26,14 +26,6 @@ func GetSessionByID(db *sqlx.DB, sessionID string) (*models.Session, error) {
 	return &session, nil
 }
 
-func DeleteSession(db *sqlx.DB, userId string) error {
-	_, err := db.Exec(`DELETE FROM public.sessions WHERE user_id = $1`, userId)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 //func AuthMiddleware(db *sqlx.DB) gin.HandlerFunc {
 //	return func(c *gin.Context) {
 //		cookie, err := c.Cookie("session_id")

@@ -59,7 +59,7 @@ button {
     margin-bottom: 15px;
 }
 
-.post__avatar {
+.avatar {
     width: 40px;
     height: 40px;
     background-color: #555;
@@ -70,6 +70,14 @@ button {
 .info {
     display: flex;
     flex-direction: column;
+}
+
+.post__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    margin-right: 10px;
+    object-fit: cover;
 }
 
 .username {
@@ -87,10 +95,15 @@ button {
     color: #f7a600;
     font-size: 18px;
     font-weight: bold;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
 
 .content {
     font-size: 16px;
+    white-space: pre-line;
+    word-wrap: break-word;
+    display: inline;
 }
 
 .footer {

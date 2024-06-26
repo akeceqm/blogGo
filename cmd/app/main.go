@@ -25,7 +25,7 @@ func main() {
 	defer db.Close()
 
 	cmd.Server.Static("/assets/", "src/")
-	cmd.Server.Static("/data/img", "./data/img")
+	cmd.Server.Static("/data/imgAvatar", "./data/imgAvatar")
 	cmd.Server.LoadHTMLGlob("src/html/*.html")
 	handler.InitRoutes(cmd.Server, db)
 	handler.InitRoutesHTML(cmd.Server, db)

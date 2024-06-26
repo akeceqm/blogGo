@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"post/internal/database/models"
 	"post/internal/services"
+	"strings"
 )
 
 func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
@@ -41,7 +42,7 @@ func GETHandlePostCommentsHTML(c *gin.Context, db *sqlx.DB) {
 	fullPostAndComments = models.FullPost{
 		Id:                post.Id,
 		Title:             post.Title,
-		Text:              post.Text,
+		Text:              strings.TrimSpace(post.Text),
 		DateCreated:       post.DateCreated,
 		DateCreatedFormat: post.DateCreated.Format("2006-01-02 15:04:05"),
 		AuthorId:          post.AuthorId,
