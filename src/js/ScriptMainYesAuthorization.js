@@ -47,6 +47,12 @@ function updatePage(data) {
         clonedContainer.querySelector('.commentCount').textContent = "Комментарии: " + item.comment_count;
         clonedContainer.querySelector('.commentCount').href = `/h/post/${item.Id}/comments`;
 
+        if (clonedContainer.querySelector('.BtnSharePost') !== null) {
+            clonedContainer.querySelector('.BtnSharePost').title = item.Id;
+            clonedContainer.querySelector('.BtnSharePost').id = 'BtnShare_' + item.Id;
+        }
+        SharePostInicialization()
+
         dataContainer.appendChild(clonedContainer);
     });
     CheckLoadPosts(function(success) {
@@ -91,5 +97,21 @@ window.onload = function() {
             const removedButton = parent.removeChild(MainBtnLoadPosts);
         }
     });
+    SharePostInicialization();
 };
+
+function SharePostInicialization() {
+    const btnsSharePost = document.querySelectorAll('.BtnSharePost');
+    btnsSharePost.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            let PostId = btn.title
+            const currentUrl = window.location.href;
+            const url = new URL(currentUrl);
+            const baseUrl = `${url.protocol}//${url.hostname}${url.port ? `:${url.port}` : ''}`;
+
+            navigator.clipboard.writeText(`${baseUrl}/h/post/${PostId}/comments`);
+            alert('Ссылка скопирована в буфер обмена');
+        });
+    });
+}
 
