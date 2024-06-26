@@ -33,77 +33,13 @@ button {
     align-items: center;
     background-color: #292a2b;
     border-radius: 20px;
-
     margin-left: 40px;
-    margin-right: 100px;
-}
-
-.post {
-    background-color: #17181e;
-    border-radius: 20px;
-    padding: 20px;
-    width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    background-color: #555;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-}
-
-.username {
-    font-weight: bold;
-    color: #f7a600;
-}
-
-.timestamp {
-    font-size: 0.8em;
-    color: #aaa;
-}
-
-.title {
-    margin-bottom: 5%;
-    color: #f7a600;
-}
-
-.content {
-    margin-bottom: 0%;
-}
-
-.footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9em;
-    color: #333537;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    background-color: #292a2b;
-    border-radius: 20px;
-}
-
-.mainPost {
-    display: block;
-    margin-left: 3%;
 }
 
 .containerComments {
     margin-left: 50px;
+    width: 100vh;
+    max-width: 100vh;
 }
 
 .comment {
@@ -114,7 +50,7 @@ button {
 .mainComments {
     height: 90vh;
     overflow-y: scroll;
-    margin-right: 10%;
+    margin-right: 2%;
 }
 
 .mainComments::-webkit-scrollbar {
@@ -142,7 +78,11 @@ button {
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
+.input:focus {
+    outline: none;
+}
 
 .mainInput {
     margin-bottom: 12vh;
 }
+
