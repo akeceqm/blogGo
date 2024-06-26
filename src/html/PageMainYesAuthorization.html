@@ -42,7 +42,7 @@
                 {{range .posts}}
                     <div id="mainPost__inner" class="mainPost__inner">
                         <div class="post">
-                            <div class="header">
+                            <div class="post__header">
                                 {{if .AvatarValid }}
                                     <div class="avatar"><img class="post__avatar" src="{{ .Avatar }}"/></div>
                                 {{else}}
@@ -51,6 +51,11 @@
                                 <div class="info">
                                     <div title="{{.AuthorId}}" class="username"><a href="http://localhost:8080/profileUser?userId={{.AuthorId}}">{{ .AuthorName }}</a></div>
                                     <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                                </div>
+                                <div class="post__options">
+                                    <button style="cursor: pointer" class="BtnSharePost" title="{{.Id}}" id="BtnShare_{{.Id}}">
+                                        <img style="cursor: pointer" src="/assets/img/SharePost.svg"/>
+                                    </button>
                                 </div>
                             </div>
                             <div class="title">{{ .Title }}</div>

@@ -52,11 +52,16 @@
         {{if .posts.Comments}}
             {{ range .posts.Comments }}
                 <div class="comment">
-                    <div class="header">
+                    <div class="post__header">
                         <div class="avatar"></div>
                         <div class="info">
                             <div style="color: #f7a600" class="username">{{ .AuthorName }}</div>
                             <div class="timestamp">{{ .DateCreatedFormat }}</div>
+                        </div>
+                        <div class="post__options">
+                            <button style="cursor: pointer" id="BtnSharePost" title="{{.Id}}" >
+                                <img style="cursor: pointer" src="/assets/img/SharePost.svg"/>
+                            </button>
                         </div>
                     </div>
                     <div style="display: inline; white-space: pre-line; word-wrap: break-word;">
